@@ -19,7 +19,7 @@ def get_project(host_url, project_id):
         'name': project_obj.name,
         'agent_fee': project_obj.agent_fee,
         'selling_fee': project_obj.selling_fee,
-        'icon': u'{}{}'.format(host_url, project_obj.icon) if project_obj.icon,
+        'icon': u'{}{}'.format(host_url, project_obj.icon) if project_obj.icon else '',
         'order_index': project_obj.order_index
     }
     return temp_data
