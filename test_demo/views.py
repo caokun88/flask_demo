@@ -6,18 +6,17 @@ create on 2017-10-13
 @author: cao kun
 """
 
-import os
 
 from flask import request
 
-from test_demo import test_app
 import service
+from test_demo import test_app
+from utils.respone_message import ok
 
 
 @test_app.route('/')
 def test_index_view():
-    env = os.getenv('env', 'dev')
-    return str(env)
+    return ok(data={'platform': 'windows'.capitalize()})
 
 
 @test_app.route('/add/role/')
