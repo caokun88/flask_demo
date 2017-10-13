@@ -16,6 +16,7 @@ from utils.respone_message import ok
 
 @test_app.route('/')
 def test_index_view():
+    print request.host_url
     return ok(data={'platform': 'windows'.capitalize()})
 
 

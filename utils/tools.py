@@ -26,7 +26,7 @@ def allowed_file(filename):
 
 def upload_file(file_obj, path_dir):
     """
-    上传文件
+    上传图片
     :param file_obj: 文件对象
     :param path_dir 路径
     :return:
@@ -35,4 +35,15 @@ def upload_file(file_obj, path_dir):
         ext = file_obj.filename.split(u'.')[-1]
         filename = u'{}.{}'.format(uuid.uuid4().hex, ext)
         file_obj.save(os.path.join(static_dir, path_dir, filename))
-        return filename
+        return u'{}/{}/{}'.format('static', path_dir, filename)
+
+
+def format_fee(fee):
+    """
+    格式化金额
+    :param fee: 金额 （分）
+    :return: fee （元）
+    """
+    fee_float = round(fee / 100.0, 2)
+    fee = int(fee_float) if fee_float == int(fee_float) else fee_float
+    return fee

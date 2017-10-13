@@ -12,6 +12,7 @@ from flask_migrate import Migrate, MigrateCommand
 from settings import app
 from index.views import index_app
 from test_demo.model import *
+from project.model import *
 
 app.register_blueprint(index_app)
 
