@@ -32,3 +32,9 @@ def test_modify_role_view(role_id):
     role = request.args.get('role')
     service.modify_role(role_id, role)
     return 'oks'
+
+
+@test_app.route('/backref/')
+def test_backref_view():
+    service.back_ref_test()
+    return 'oks'

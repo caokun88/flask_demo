@@ -6,11 +6,11 @@
 </head>
 <body>
     <form name="my_form", enctype="multipart/form-data", method="post">
-        商品名称：<input name="name", value="" type="text">
-        代理价格：<input name="agent_fee", value="" type="number">
-        出售价格：<input name="selling_fee", value="" type="number">
-        icon：<input name="icon", value="" type="file">
-        优先级：<input name="order_index", value="" type="number">
+        商品名称：<input name="name", value="{{ name }}" type="text">
+        代理价格：<input name="agent_fee", value="{{ agent_fee }}" type="number">
+        出售价格：<input name="selling_fee", value="{{ selling_fee }}" type="number">
+        icon：<input name="icon", value="{{ icon }}" type="file">
+        优先级：<input name="order_index", value="{{ order_index }}" type="number">
         <input type="submit" value="提交">
     </form>
 </body>

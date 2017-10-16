@@ -6,7 +6,7 @@ create on 2017-10-13
 @author: cao kun
 """
 
-from model import db, TestRole
+from model import db, TestRole, TestUser
 
 
 def add_role(role):
@@ -24,3 +24,17 @@ def modify_role(role_id, role):
         role_obj.role = role
         db.session.commit()
         print '23'
+
+
+def back_ref_test():
+    user_obj = TestUser.query.filter_by(id=1).first()
+    # print user_obj.testuser_set
+    print user_obj.role
+
+    role_obj = TestRole.query.filter_by(id=2).first()
+    print str(role_obj.testuser_set)
+
+    user_obj_list = TestUser.query.join(TestRole).filter_by(role='sup4').all()
+    for obj in user_obj_list:
+        print obj.name
+    print str(TestUser.query.join(TestRole).filter_by(role='sup4'))

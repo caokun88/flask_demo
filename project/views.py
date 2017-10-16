@@ -12,7 +12,7 @@ from utils import tools
 from project import project_app
 import service
 
-from utils.respone_message import ok
+from utils.respone_message import ok, bad_request
 
 
 @project_app.route('/list/')
@@ -23,9 +23,9 @@ def project_list_view():
 
 
 @project_app.route('/add/', methods=['POST', 'GET'])
-def project_add_view():
+@project_app.route('/modify/<int:project_id>', methods=['POST', 'GET'])
+def project_add_view(project_id=None):
     if request.method == 'POST':
-        project_id = request.form.get('project_id')
         name = request.form.get('name')
         agent_fee = request.form.get('agent_fee')
         selling_fee = request.form.get('selling_fee')
@@ -43,6 +43,9 @@ def project_add_view():
         else:
             return u'参数错误'
     else:
-        # project_info = service.get_project(request.host_url, p_id)
-        return render_template('project_add.html')
+        project_info = service.get_project(request.host_url, project_id)
+        print project_info
+        if isinstance(project_info, (int, long)):
+            return bad_request()
+        return render_template('project_add.html', **project_info)
 

@@ -19,6 +19,7 @@ class TestUser(db.Model):
     name = db.Column(db.String(64), unique=True)
     is_active = db.Column(db.Boolean, default=True)
     role_id = db.Column(db.Integer, db.ForeignKey('test_role.id'))
+    role = db.relationship('TestRole', backref=db.backref('testuser_set'))
     create_time = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp())
     up_time = db.Column(db.TIMESTAMP, onupdate=datetime.datetime.now)
 
@@ -29,7 +30,6 @@ class TestRole(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     role = db.Column(db.String(32), default='super')
-    users = db.relationship('TestUser', backref='role')
     create_time = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp())
     update_time = db.Column(db.TIMESTAMP, onupdate=datetime.datetime.now)
 

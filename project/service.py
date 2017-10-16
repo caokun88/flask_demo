@@ -11,17 +11,20 @@ from utils import tools
 
 
 def get_project(host_url, project_id):
-    project_obj = PayProject.query.filter_by(id=project_id).first()
-    if not project_obj:
-        return 3
-    temp_data = {
-        'id': project_obj.id,
-        'name': project_obj.name,
-        'agent_fee': project_obj.agent_fee,
-        'selling_fee': project_obj.selling_fee,
-        'icon': u'{}{}'.format(host_url, project_obj.icon) if project_obj.icon else '',
-        'order_index': project_obj.order_index
-    }
+    if project_id:
+        project_obj = PayProject.query.filter_by(id=project_id).first()
+        if not project_obj:
+            return 3
+        temp_data = {
+            'id': project_obj.id,
+            'name': project_obj.name,
+            'agent_fee': project_obj.agent_fee,
+            'selling_fee': project_obj.selling_fee,
+            'icon': u'{}{}'.format(host_url, project_obj.icon) if project_obj.icon else '',
+            'order_index': project_obj.order_index
+        }
+    else:
+        temp_data = {}
     return temp_data
 
 
