@@ -13,6 +13,8 @@ from settings import app
 from index.views import index_app
 from test_demo.model import *
 from project.model import *
+from auth.model import *
+from order.model import *
 
 app.register_blueprint(index_app)
 

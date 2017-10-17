@@ -16,14 +16,11 @@ def add_role(role):
 
 
 def modify_role(role_id, role):
-    print role_id
     role_obj = TestRole.query.filter_by(id=role_id).first()
     print role_obj
     if role_obj:
-        print 'user'
         role_obj.role = role
         db.session.commit()
-        print '23'
 
 
 def back_ref_test():

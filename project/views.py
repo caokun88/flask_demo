@@ -18,7 +18,6 @@ from utils.respone_message import ok, bad_request
 @project_app.route('/list/')
 def project_list_view():
     project_list = service.get_project_list(request.host_url)
-    print project_list
     return ok(data={'project_list': project_list})
 
 
@@ -44,7 +43,6 @@ def project_add_view(project_id=None):
             return u'参数错误'
     else:
         project_info = service.get_project(request.host_url, project_id)
-        print project_info
         if isinstance(project_info, (int, long)):
             return bad_request()
         return render_template('project_add.html', **project_info)

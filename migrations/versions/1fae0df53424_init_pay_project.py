@@ -1,9 +1,7 @@
 """init pay_project
-
 Revision ID: 1fae0df53424
 Revises: 1e9086989e95
 Create Date: 2017-10-13 19:03:22.922000
-
 """
 from alembic import op
 import sqlalchemy as sa

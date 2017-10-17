@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加订单</title>
+</head>
+<body>
+    <form name="my_form" method="post">
+        商品名称：
+        <select name="project_id">
+            {% for p in project_list %}
+                <option value="{{ p.id }}">{{ p.name }}</option>
+            {% endfor %}
+        </select>
+        支付金额：<input name="real_fee", value="" type="number">
+        姓名：<input name="name", value="" type="text">
+        地址：<input name="address", value="" type="text">
+        手机号：<input name="phone", value="" type="text">
+        支付方式：
+        <select name="pay_type">
+            <option value="wechat_pay">微信</option>
+            <option value="ali_pay">支付宝</option>
+        </select>
+        <input type="submit" value="提交">
+    </form>
+</body>
+</html>

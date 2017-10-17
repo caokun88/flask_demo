@@ -9,6 +9,7 @@ create on 2017-10-13
 import datetime
 
 from settings import db
+from project.model import PayProject
 
 
 class PayOrder(db.Model):
@@ -16,7 +17,7 @@ class PayOrder(db.Model):
     __tablename__ = 'pay_order'
 
     id = db.Column(db.Integer, primary_key=True)
-    project = db.Column(db.Integer, db.ForeignKey('project.pay_project.id'))
+    project_id = db.Column(db.Integer, db.ForeignKey('pay_project.id'))
     real_fee = db.Column(db.Integer)  # 实际支付金额（分）
     name = db.Column(db.String(64))
     address = db.Column(db.String(255))
@@ -24,3 +25,4 @@ class PayOrder(db.Model):
     pay_type = db.Column(db.String(20))  # 微信or支付宝（wechat_pay or ali_pay）
     create_time = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp())
     update_time = db.Column(db.TIMESTAMP, onupdate=datetime.datetime.now)
+    project_obj = db.relationship('PayProject', backref=db.backref('payproject_set'))
