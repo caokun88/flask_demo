@@ -6,11 +6,13 @@ create on 2017-10-17
 @author: cao kun
 """
 
-from flask import redirect, url_for, g, request, render_template, flash
+from StringIO import StringIO
+
+from flask import redirect, url_for, g, request, render_template, flash, session, make_response
 from flask_login import logout_user, login_user, current_user, login_required
 from auth import lm, auth_app
 from model import User, Role, db
-from utils import decorator
+from utils import decorator, captcha
 
 
 @lm.user_loader
@@ -30,6 +32,18 @@ def skip_view():
     return render_template('skip.html')
 
 
+@auth_app.route('/captcha/')
+def captcha_view():
+    img, range_str = captcha.generate_captcha()
+    session['captcha_code'] = range_str.upper()
+    buf = StringIO()
+    img.save(buf, 'JPEG', quality=60)
+    buffer_str = buf.getvalue()
+    response = make_response(buffer_str)
+    response.headers['Content-Type'] = 'image/jpeg'
+    return response
+
+
 @auth_app.route('/login/', methods=['POST', 'GET'])
 def login_view():
     next_url = request.args.get('next', '')
@@ -38,10 +52,13 @@ def login_view():
     if request.method == 'POST':
         nickname = request.form.get('nickname', '')
         password = request.form.get('password', '')
+        captcha = request.form.get('captcha', '').upper()
+        if captcha and captcha != session.get('captcha_code') or not captcha:
+            flash(u'验证码错误')
+            return redirect(url_for('auth.skip_view'))
         user = User.query.filter_by(nickname=nickname).first()
         if user is not None and user.verify_password(password):
             login_user(user)
-            flash(u'成功')
             return redirect(next_url or url_for('index.index_view'))
         else:
             flash(u'失败')

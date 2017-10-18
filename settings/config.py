@@ -9,7 +9,7 @@ create on 2017-10-13
 
 class BaseConfig(object):  # 基本配置类
     SECRET_KEY = 'asdasdfadsfadsfadfafdsa'
-    PERMANENT_SESSION_LIFETIME = 60 * 20
+    PERMANENT_SESSION_LIFETIME = 60 * 60 * 2
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     DEBUG = True
     ITEMS_PER_PAGE = 10
@@ -24,6 +24,7 @@ class DevConfig(BaseConfig):
 
 class DeployConfig(BaseConfig):
     DEBUG = False
+    PERMANENT_SESSION_LIFETIME = 60 * 20
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:kunrui1314@127.0.0.1/flask_demo?charset=utf8mb4'
     SQLALCHEMY_BINDS = {
         'flask_demo': 'mysql+pymysql://root:kunrui1314@127.0.0.1/flask_demo?charset=utf8mb4'

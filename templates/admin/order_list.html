@@ -1,0 +1,54 @@
+{% extends "/base/base.html" %}
+
+{% block title %}订单列表{% endblock %}
+
+{% block content %}
+    <div class="table-responsive">
+        <table class="table table-hover">
+        <thead>
+            <tr>
+                <td>订单id</td>
+                <td>商品名称</td>
+                <td>代理金额</td>
+                <td>出售金额</td>
+                <td>支付金额</td>
+                <td>利润</td>
+                <td>支付方式</td>
+                <td>名字</td>
+                <td>地址</td>
+                <td>手机号</td>
+                <td>创建时间</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in order_list %}
+                <tr>
+                    <td>{{ order.id }}</td>
+                    <td>{{ order.project_name }}</td>
+                    <td>{{ order.agent_fee }}</td>
+                    <td>{{ order.selling_fee }}</td>
+                    <td>{{ order.real_fee }}</td>
+                    <td>{{ order.profit_fee }}</td>
+                    <td>{{ order.pay_type }}</td>
+                    <td>{{ order.name }}</td>
+                    <td>{{ order.address }}</td>
+                    <td>{{ order.phone }}</td>
+                    <td>{{ order.create_time }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+{% endblock %}
+
+{% block ext_css %}
+    <style>
+        .table {
+            text-align: center;
+        }
+        .table>tbody>tr>td {
+            vertical-align: middle;
+        }
+    </style>
+{% endblock %}
+

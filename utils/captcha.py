@@ -5,9 +5,10 @@ import os
 import random
 import string
 
-from django.conf import settings
+# from django.conf import settings
 
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
+from settings import base_dir
 
 
 IMAGE_MODE = 'RGB'
@@ -50,7 +51,7 @@ def _create_points(draw):
 
 def generate_captcha():
     image = Image.new(IMAGE_MODE, IMAGE_SIZE, IMAGE_COLOR)
-    front_file = os.path.join(settings.BASE_DIR, 'dj_demo/fonts/Arial.ttf')
+    front_file = os.path.join(base_dir, 'templates/fonts/Arial.ttf')
     font = ImageFont.truetype(front_file, FONT_SIZE)
     draw = ImageDraw.Draw(image)
     rand_str = ''.join(_rand_list(4))
@@ -68,7 +69,7 @@ def generate_captcha():
     image = image.transform(IMAGE_SIZE, Image.PERSPECTIVE, params)  # 创建扭曲
 
     image = image.filter(ImageFilter.EDGE_ENHANCE_MORE)  # 滤镜，边界加强（阈值更大）
-    return image
+    return image, rand_str
 
 
 if __name__ == '__main__':

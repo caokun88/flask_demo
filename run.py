@@ -6,7 +6,9 @@ create on 2017-10-11
 @author: cao kun
 """
 
-from flask import send_from_directory, g
+import os
+
+from flask import send_from_directory, g, url_for, render_template
 from flask_login import current_user
 
 from settings import app, static_dir
@@ -25,14 +27,45 @@ app.register_blueprint(order_app, url_prefix='/order')
 
 @app.before_request
 def before_request():
-    print current_user
     g.user = current_user
+
+
+@app.errorhandler(404)
+def page_not_found_view(e):
+    return render_template('error/404.html')
+
+
+@app.context_processor
+def global_menu():
+    menu_list = [
+        {
+            'parent_name': u'用户管理',
+            'sub_list': [
+                {'name': u'添加用户', 'url': url_for('auth.register_view')},
+                {'name': u'退出', 'url': url_for('auth.logout_view')}
+            ]
+        },
+        {
+            'parent_name': u'商品管理',
+            'sub_list': [
+                {'name': u'添加商品', 'url': url_for('project.project_add_view')},
+                {'name': u'商品列表', 'url': url_for('project.project_list_view')},
+            ]
+        },
+        {
+            'parent_name': u'订单管理',
+            'sub_list': [
+                {'name': u'添加订单', 'url': url_for('order.order_add_view')},
+                {'name': u'订单列表', 'url': url_for('order.order_list_view')},
+            ]
+        }
+    ]
+    return {'menu_list': menu_list}
 
 
 if __name__ == '__main__':
 
-    @app.route('/static/<path:filename>')
+    @app.route('/static/upload/<path:filename>')
     def show_file(filename):
-        print filename
-        return send_from_directory(static_dir, filename)
+        return send_from_directory(os.path.join(static_dir, 'upload'), filename)
     app.run(host='0.0.0.0', port=5000, debug=app.debug)

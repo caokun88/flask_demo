@@ -7,7 +7,7 @@ create on 2017-10-13
 """
 
 from model import db, PayProject
-from utils import tools
+from utils import tools, constant
 
 
 def get_project(host_url, project_id):
@@ -43,7 +43,8 @@ def get_project_list(host_url):
             'agent_fee': tools.format_fee(project_obj.agent_fee),
             'selling_fee': tools.format_fee(project_obj.selling_fee),
             'icon': u'{}{}'.format(host_url, project_obj.icon) if project_obj.icon else '',
-            'order_index': project_obj.order_index
+            'order_index': project_obj.order_index,
+            'create_time': project_obj.create_time.strftime(constant.DATE_TIME_FORMAT)
         })
     return project_list
 

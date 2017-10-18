@@ -2,15 +2,65 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>login</title>
+    <title>登录</title>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-    <form action="" method="post">
-        用户名：<input type="text" name="nickname">
-        密  码：<input type="password" name="password">
-        验证码：<input type="text" name="captcha">
-        <input type="submit" value="提交">
-    </form>
-
+    <div class="container login-wrap">
+        <h2>颐和果园园鲜果时光</h2>
+        <hr>
+        <form name="my_form" method="post" class="form-horizontal" role="form">
+            <div class="form-group">
+                <label for="nickname" class="col-sm-2 control-label">用户名</label>
+                <div class="col-sm-10">
+                    <input type="text" name="nickname" value="" class="form-control" id="nickname" placeholder="请输入用户名">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="password" class="col-sm-2 control-label">密&nbsp;&nbsp;&nbsp;&nbsp;码</label>
+                <div class="col-sm-10">
+                    <input type="password" name="password" value="" class="form-control" id="password" placeholder="请输入密码">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="captcha" class="col-sm-2 control-label">验证码</label>
+                <div class="col-sm-6">
+                    <input type="text" name="captcha" value="" class="form-control" id="captcha" placeholder="请输入验证码">
+                </div>
+                <div class="col-sm-2">
+                    <img src="{{ url_for('auth.captcha_view') }}" id="get_captcha">
+                </div>
+                <label id="update" class="col-sm-2 control-label">点击刷新</label>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-primary">登录</button>
+                </div>
+            </div>
+        </form>
+    </div>
 </body>
+<style>
+    h2 {
+        text-align: center;
+    }
+    .login-wrap {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+        width: 600px;
+        height: 320px;
+        background-color: #ccc;
+    }
+</style>
+<script>
+    $("#update").on('click', function () {
+        $("#get_captcha").attr("src", "/auth/captcha/?" + Math.random())
+    })
+</script>
 </html>

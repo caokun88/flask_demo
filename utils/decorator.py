@@ -5,8 +5,9 @@
 import time
 from functools import wraps
 
-from flask import g, request
-from respone_message import request_method_error, no_auth
+from flask import g, request, redirect, url_for
+from respone_message import request_method_error, no_auth, forbidden
+import tools
 
 
 def require_method(methods):
@@ -35,7 +36,11 @@ def require_permission(func):
     def inner(*args, **kwargs):
         if g.user.role_obj.role == 'super':
             return func(*args, **kwargs)
-        return no_auth()
+        is_ajax = tools.is_ajax()
+        if is_ajax:
+            return forbidden()
+        else:
+            return redirect(url_for('index.forbidden_view'))
     return inner
 
 

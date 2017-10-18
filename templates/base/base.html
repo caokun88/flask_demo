@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>{% block title %}{% endblock %}</title>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    {% block ext_css %}{% endblock %}
+    <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    {% block ext_js %}{% endblock %}
+</head>
+<body class="container">
+    <header class="container header">{% block header %}系统{% endblock %}</header>
+    <div class="container">
+        <nav class="navbar navbar-default" role="navigation">
+           <!--<div class="navbar-header">-->
+              <!--<a class="navbar-brand" href="#">W3Cschool</a>-->
+           <!--</div>-->
+           <div>
+              <ul class="nav navbar-nav">
+                  {% for menu in menu_list %}
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                           {{ menu.parent_name }}
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            {% for sub_menu in menu.sub_list %}
+                                <li><a href="{{ sub_menu.url }}">{{ sub_menu.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                  {% endfor %}
+              </ul>
+           </div>
+        </nav>
+        <div class="content">{% block content %}欢迎{% endblock %}</div>
+    </div>
+    <footer class="footer">{% block footer %}底部{% endblock %}</footer>
+</body>
+<style>
+    .content {
+        min-height: 680px;
+    }
+    .header, .footer {
+        height: 50px;
+        line-height: 50px;
+        text-align: center;
+    }
+</style>
+</html>

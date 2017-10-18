@@ -9,8 +9,7 @@ create on 2017-10-13
 import os
 import uuid
 
-from werkzeug.utils import secure_filename
-
+from flask import request
 from settings import static_dir
 from utils.constant import ALLOWED_EXTENSIONS
 
@@ -47,3 +46,14 @@ def format_fee(fee):
     fee_float = round(fee / 100.0, 2)
     fee = int(fee_float) if fee_float == int(fee_float) else fee_float
     return fee
+
+
+def is_ajax():
+    """
+    判断请求是否为ajax
+    :return:
+    """
+    ajax = request.headers.get('X-Requested-With')
+    if ajax == 'XMLHttpRequest':
+        return True
+    return False
