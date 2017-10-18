@@ -60,7 +60,7 @@ def global_menu():
             ]
         }
     ]
-    return {'menu_list': menu_list}
+    return {'menu_list': menu_list, 'user': g.user}
 
 
 if __name__ == '__main__':

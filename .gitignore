@@ -9,4 +9,5 @@ local_settings.py
 *.xls
 .DS_Store
 *.sh
+*.xml
 

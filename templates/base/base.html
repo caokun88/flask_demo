@@ -17,7 +17,7 @@
            <!--<div class="navbar-header">-->
               <!--<a class="navbar-brand" href="#">W3Cschool</a>-->
            <!--</div>-->
-           <div>
+           <div class="container">
               <ul class="nav navbar-nav">
                   {% for menu in menu_list %}
                     <li class="dropdown">
@@ -35,17 +35,20 @@
               </ul>
            </div>
         </nav>
-        <div class="content">{% block content %}欢迎{% endblock %}</div>
+        <div class="content">{% block content %}<h2>欢迎： {{ user.real_name }}</h2>{% endblock %}</div>
     </div>
     <footer class="footer">{% block footer %}底部{% endblock %}</footer>
 </body>
 <style>
     .content {
-        min-height: 680px;
+        min-height: 380px;
     }
     .header, .footer {
         height: 50px;
         line-height: 50px;
+        text-align: center;
+    }
+    h2 {
         text-align: center;
     }
 </style>
