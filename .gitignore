@@ -4,7 +4,7 @@
 *.pyc
 __pycache__/
 local_settings.py
-.idea/
+.idea/.*
 
 *.xls
 .DS_Store
