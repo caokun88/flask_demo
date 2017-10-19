@@ -11,6 +11,7 @@ import os
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_wtf.csrf import CsrfProtect
 
 from config import config
 
@@ -23,6 +24,8 @@ else:
 app = Flask(__name__, template_folder='../templates/')
 app.config.from_object(config[env])
 db = SQLAlchemy(app)
+csrf = CsrfProtect()
+csrf.init_app(app)
 
 base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 

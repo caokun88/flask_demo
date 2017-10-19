@@ -13,6 +13,7 @@ from flask_login import logout_user, login_user, current_user, login_required
 from auth import lm, auth_app
 from model import User, Role, db
 from utils import decorator, captcha
+from settings import csrf
 
 
 @lm.user_loader

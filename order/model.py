@@ -18,6 +18,7 @@ class PayOrder(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     project_id = db.Column(db.Integer, db.ForeignKey('pay_project.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     real_fee = db.Column(db.Integer)  # 实际支付金额（分）
     name = db.Column(db.String(64))
     address = db.Column(db.String(255))
@@ -26,3 +27,5 @@ class PayOrder(db.Model):
     create_time = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp())
     update_time = db.Column(db.TIMESTAMP, onupdate=datetime.datetime.now)
     project_obj = db.relationship('PayProject', backref=db.backref('payproject_set'))
+    user_obj = db.relationship('User', backref=db.backref('user_set'))
+    deleted = db.Column(db.Boolean, default=False, nullable=False)  # 是否显示

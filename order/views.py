@@ -6,7 +6,7 @@ create on 2017-10-17
 @author: cao kun
 """
 
-from flask import request, render_template, redirect, url_for
+from flask import request, render_template, redirect, url_for, g
 from flask_login import login_required
 
 from order import order_app
@@ -22,7 +22,7 @@ from project import service as project_service
 def order_list_view():
     start_time = request.args.get('start_time')
     end_time = request.args.get('end_time')
-    order_list = service.get_order_list_service(start_time, end_time)
+    order_list = service.get_order_list_service(start_time, end_time, g.user)
     return render_template('admin/order_list.html', order_list=order_list)
 
 
@@ -42,3 +42,11 @@ def order_add_view():
     else:
         project_list = project_service.get_project_list(request.host_url)
         return render_template('admin/order_add.html', project_list=project_list)
+
+
+@order_app.route('/delete/<int:order_id>/', methods=['POST'])
+@login_required
+@decorator.require_permission
+def order_deleted_view(order_id):
+    service.delete_order_model(order_id, g.user)
+    return ok()

@@ -24,8 +24,8 @@ def add_order_model(project_id, real_fee, name, address, phone, pay_type):
     db.session.commit()
 
 
-def get_order_list_model(start_time, end_time):
-    order_obj_list = PayOrder.query.filter()
+def get_order_list_model(start_time, end_time, user, deleted=0):
+    order_obj_list = PayOrder.query.filter(PayOrder.deleted == deleted, PayOrder.user_id == user.id)
     if start_time:
         order_obj_list = PayOrder.query.filter(
             PayOrder.create_time >= start_time
@@ -37,13 +37,24 @@ def get_order_list_model(start_time, end_time):
     return order_obj_list
 
 
+def delete_order_model(order_id, user):
+    """
+    删除订单
+    :param order_id:
+    :param user:
+    :return:
+    """
+    order_obj_list = PayOrder.query.filter(PayOrder.id == order_id, PayOrder.user_id == user.id)
+    order_obj_list.update({'deleted': 1})
+    db.session.commit()
+
 """
 service
 """
 
 
-def get_order_list_service(start_time, end_time):
-    order_obj_list = get_order_list_model(start_time, end_time)
+def get_order_list_service(start_time, end_time, user, deleted=0):
+    order_obj_list = get_order_list_model(start_time, end_time, user, deleted=deleted)
     order_list = list()
     for order_obj in order_obj_list:
         project_obj = order_obj.project_obj
