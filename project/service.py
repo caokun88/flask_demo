@@ -61,7 +61,8 @@ def add_or_modify_project(name, agent_fee, selling_fee, icon, order_index, proje
         project_obj.name = name
         project_obj.agent_fee = agent_fee
         project_obj.selling_fee = selling_fee
-        project_obj.icon = icon
+        if icon:
+            project_obj.icon = icon
         project_obj.order_index = order_index
         db.session.add(project_obj)
         db.session.commit()

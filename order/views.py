@@ -27,9 +27,10 @@ def order_list_view():
 
 
 @order_app.route('/add/', methods=['POST', 'GET'])
+@order_app.route('/modify/<int:order_id>/', methods=['POST', 'GET'])
 @login_required
 @decorator.require_permission
-def order_add_view():
+def order_add_view(order_id=None):
     if request.method == 'POST':
         real_fee = request.form.get('real_fee')
         pay_type = request.form.get('pay_type')
@@ -37,11 +38,14 @@ def order_add_view():
         address = request.form.get('address')
         phone = request.form.get('phone')
         project_id = request.form.get('project_id')
-        service.add_order_model(project_id, real_fee, name, address, phone, pay_type)
+        if all([real_fee, pay_type, name, address, phone, project_id]):
+            service.add_order_model(order_id, project_id, real_fee, name, address, phone, pay_type, g.user)
         return redirect(url_for('order.order_list_view'))
     else:
         project_list = project_service.get_project_list(request.host_url)
-        return render_template('admin/order_add.html', project_list=project_list)
+        order_info = service.get_order_info(order_id)
+        print order_info
+        return render_template('admin/order_add.html', project_list=project_list, order_info=order_info)
 
 
 @order_app.route('/delete/<int:order_id>/', methods=['POST'])

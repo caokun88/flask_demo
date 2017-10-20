@@ -24,7 +24,7 @@
         <tbody>
             {% for order in order_list %}
                 <tr>
-                    <td>{{ order.id }}</td>
+                    <td><a href="{{ url_for('order.order_add_view', order_id=order.id) }}">{{ order.id }}</a></td>
                     <td>{{ order.project_name }}</td>
                     <td>{{ order.agent_fee }}</td>
                     <td>{{ order.selling_fee }}</td>

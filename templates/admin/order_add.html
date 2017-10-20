@@ -11,7 +11,7 @@
                 <div class="col-sm-10">
                     <select class="form-control" id="project_id" name="project_id">
                         {% for p in project_list %}
-                            <option value="{{ p.id }}">{{ p.name }}</option>
+                            <option value="{{ p.id }}" {% if order_info.project_id == p.id %} selected {% endif %}>{{ p.name }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -19,33 +19,33 @@
             <div class="form-group">
                 <label for="real_fee" class="col-sm-2 control-label">支付金额</label>
                 <div class="col-sm-10">
-                    <input type="number" name="real_fee" value="{{ real_fee }}" class="form-control" id="real_fee" placeholder="请输入支付金额（单位为分）">
+                    <input type="number" name="real_fee" value="{{ order_info.real_fee }}" class="form-control" id="real_fee" placeholder="请输入支付金额（单位为分）">
                 </div>
             </div>
             <div class="form-group">
                 <label for="name" class="col-sm-2 control-label">姓名</label>
                 <div class="col-sm-10">
-                    <input type="text" name="name" value="{{ name }}" class="form-control" id="name" placeholder="请输入收货人姓名">
+                    <input type="text" name="name" value="{{ order_info.name }}" class="form-control" id="name" placeholder="请输入收货人姓名">
                 </div>
             </div>
             <div class="form-group">
                 <label for="address" class="col-sm-2 control-label">地址</label>
                 <div class="col-sm-10">
-                    <input type="text" name="address" value="{{ address }}" class="form-control" id="address" placeholder="请输收货人地址">
+                    <input type="text" name="address" value="{{ order_info.address }}" class="form-control" id="address" placeholder="请输收货人地址">
                 </div>
             </div>
             <div class="form-group">
                 <label for="phone" class="col-sm-2 control-label">手机号</label>
                 <div class="col-sm-10">
-                    <input type="text" name="phone" value="{{ phone }}" class="form-control" id="phone" placeholder="请输入收货人手机号">
+                    <input type="text" name="phone" value="{{ order_info.phone }}" class="form-control" id="phone" placeholder="请输入收货人手机号">
                 </div>
             </div>
             <div class="form-group">
                 <label for="pay_type" class="col-sm-2 control-label">商品名称</label>
                 <div class="col-sm-10">
                     <select class="form-control" id="pay_type" name="pay_type">
-                        <option value="wechat_pay">微信</option>
-                        <option value="ali_pay">支付宝</option>
+                        <option value="wechat_pay" {% if order_info.pay_type == '微信' %} selected {% endif %}>微信</option>
+                        <option value="ali_pay" {% if order_info.pay_type == '支付宝' %} selected {% endif %}>支付宝</option>
                     </select>
                 </div>
 
