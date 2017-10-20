@@ -35,7 +35,7 @@
                     <td>{{ order.address }}</td>
                     <td>{{ order.phone }}</td>
                     <td>{{ order.create_time }}</td>
-                    <td><button id="delete-order" class="btn-danger" onclick="delete_order('{{ order.id }}')">删除</button></td>
+                    <td><button id="delete-order" class="btn btn-danger" onclick="delete_order('{{ order.id }}')">删除</button></td>
                 </tr>
             {% endfor %}
         </tbody>
