@@ -6,6 +6,8 @@ create on 2017-10-17
 @author: cao kun
 """
 
+import datetime
+
 from flask import request, render_template, redirect, url_for, g
 from flask_login import login_required
 
@@ -14,6 +16,7 @@ from utils import decorator
 from utils.respone_message import ok
 import service
 from project import service as project_service
+from utils.constant import DATE_FORMAT
 
 
 @order_app.route('/list/')
@@ -22,6 +25,8 @@ from project import service as project_service
 def order_list_view():
     start_time = request.args.get('start_time', '')
     end_time = request.args.get('end_time', '')
+    if not any([start_time, end_time]):
+        start_time = datetime.datetime.now().strftime(DATE_FORMAT)
     order_list, total_count, total_flowing_fee, total_profit_fee = \
         service.get_order_list_service(start_time, end_time, g.user)
     resp_data = {
