@@ -72,4 +72,16 @@ if __name__ == '__main__':
     @app.route('/static/<filename>')
     def show_favicon_file(filename):
         return send_from_directory(static_dir, filename)
+
+
+    @app.route('/static/js/<path:filename>')
+    def show_js_file(filename):
+        return send_from_directory(os.path.join(static_dir, 'js'), filename)
+
+
+    @app.route('/static/css/<path:filename>')
+    def show_css_file(filename):
+        return send_from_directory(os.path.join(static_dir, 'css'), filename)
+
+
     app.run(host='0.0.0.0', port=5000, debug=app.debug)

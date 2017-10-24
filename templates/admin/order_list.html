@@ -3,7 +3,43 @@
 {% block title %}订单列表{% endblock %}
 
 {% block content %}
-    <div class="table-responsive">
+    <div class="row">
+        <div class='col-sm-5'>
+            <div class="form-group">
+                <label>起始时间：</label>
+                <!--指定 date标记-->
+                <div class='input-group date' id='datetimepicker1'>
+                    <input type='text' class="form-control" value="{{ start_time }}"/>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class='col-sm-5'>
+            <div class="form-group">
+                <label>结束时间：</label>
+                <!--指定 date标记-->
+                <div class='input-group date' id='datetimepicker2'>
+                    <input type='text' class="form-control" value="{{ end_time }}" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class='col-sm-2'>
+            <div class="form-group">
+                <label></label>
+                <button class="btn btn-primary form-control" onclick="order_search()">搜索</button>
+            </div>
+        </div>
+    </div>
+    <div class="container" style="height: 40px; line-height: 40px;">
+        <div class="">总订单数：{{ total_count }}，总流水：{{ total_flowing_fee }}，总利润：{{ total_profit_fee }}</div>
+    </div>
+    {% if order_list %}
+        <div class="table-responsive">
         <table class="table table-hover">
         <thead>
             <tr>
@@ -41,9 +77,15 @@
         </tbody>
     </table>
     </div>
+    {% else %}
+        <div class="container" style="height: 300px; line-height: 300px; text-align: center">
+            <div class="">暂无订单</div>
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block ext_css %}
+    <link href="{{ url_for('static', filename='css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet" />
     <style>
         .table {
             text-align: center;
@@ -55,7 +97,10 @@
 {% endblock %}
 
 {% block ext_js %}
+    <script src="{{ url_for('static', filename='js/bootstrap-datetimepicker.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap-datetimepicker.zh-CN.js') }}"></script>
     <script>
+        // ajax 删除订单
         function delete_order(order_id) {
             var csrf_token = '{{ csrf_token() }}';
 
@@ -77,5 +122,30 @@
                 }
             })
         }
+        // 时间插件
+        $(function () {
+            $('#datetimepicker1').datetimepicker({
+                minView: "month", //选择日期后，不会再跳转去选择时分秒
+                language:  'zh-CN',
+                format: 'yyyy-mm-dd',
+                todayBtn:  1,
+                autoclose: 1
+            });
+            $('#datetimepicker2').datetimepicker({
+                minView: "month", //选择日期后，不会再跳转去选择时分秒
+                language:  'zh-CN',
+                format: 'yyyy-mm-dd',
+                todayBtn:  1,
+                autoclose: 1
+            });
+        });
+
+        // 搜索
+        function order_search() {
+            var start_time = $("#datetimepicker1>input").val();
+            var end_time = $("#datetimepicker2>input").val();
+            window.location.href = '/order/list/?start_time=' + start_time + '&end_time=' + end_time;
+        }
+
     </script>
 {% endblock %}

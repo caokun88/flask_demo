@@ -20,10 +20,15 @@ from project import service as project_service
 @login_required
 @decorator.require_permission
 def order_list_view():
-    start_time = request.args.get('start_time')
-    end_time = request.args.get('end_time')
-    order_list = service.get_order_list_service(start_time, end_time, g.user)
-    return render_template('admin/order_list.html', order_list=order_list)
+    start_time = request.args.get('start_time', '')
+    end_time = request.args.get('end_time', '')
+    order_list, total_count, total_flowing_fee, total_profit_fee = \
+        service.get_order_list_service(start_time, end_time, g.user)
+    resp_data = {
+        'order_list': order_list, 'start_time': start_time, 'end_time': end_time, 'total_count': total_count,
+        'total_flowing_fee': total_flowing_fee, 'total_profit_fee': total_profit_fee
+    }
+    return render_template('admin/order_list.html', **resp_data)
 
 
 @order_app.route('/add/', methods=['POST', 'GET'])
