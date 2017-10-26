@@ -15,8 +15,9 @@ from auth import lm, auth_app
 from model import User, Role, db
 from utils import decorator, captcha
 from settings import csrf
-from utils.respone_message import bad_request, expire_request
+from utils.respone_message import bad_request, expire_request, ok, error
 from utils import tools
+from utils.constant import AGENT_LEVEL, MONTH_LIST, MONTH_DICT, AGENT_DICT
 import service
 
 
@@ -125,6 +126,21 @@ def user_list_view():
         return bad_request()
     user_list, page = service.get_user_list(nickname, current_page, page_size)
     resp_data = {
-        'user_list': user_list, 'page': page, 'nickname': nickname
+        'user_list': user_list, 'page': page, 'nickname': nickname, 'agent_level_list': AGENT_LEVEL,
+        'month_dict': MONTH_DICT, 'month_list': MONTH_LIST, 'agent_level_dict': AGENT_DICT
     }
     return render_template('admin/user_list.html', **resp_data)
+
+
+@auth_app.route('/modify/<int:user_id>/user/', methods=['POST'])
+@login_required
+@decorator.require_permission
+def modify_user_view(user_id):
+    level = request.form.get('level')
+    expire_time_str = request.form.get('expire_time_str')
+    msg = service.modify_user(user_id, level, expire_time_str)
+    if msg == 3:
+        return bad_request()
+    elif msg == 1:
+        return ok()
+    return error()

@@ -40,7 +40,8 @@ def order_list_view():
     project_list = project_service.get_project_list(request.host_url)
     resp_data = {
         'order_list': order_list, 'start_time': start_time, 'end_time': end_time, 'page': page,
-        'total_flowing_fee': total_flowing_fee, 'total_profit_fee': total_profit_fee, 'project_list': project_list
+        'total_flowing_fee': total_flowing_fee, 'total_profit_fee': total_profit_fee, 'project_list': project_list,
+        'project_id': project_id, 'keyword': keyword
     }
     return render_template('admin/order_list.html', **resp_data)
 

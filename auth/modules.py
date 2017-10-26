@@ -6,8 +6,10 @@ create on 2017-10-25
 @author: cao kun
 """
 
+import datetime
+
 from model import db, User, Role
-from utils.constant import CURRENT_PAGE, PAGE_SIZE
+from utils.constant import CURRENT_PAGE, PAGE_SIZE, AGENT_LEVEL, EXPIRE_TIME_DICT, MONTH_DICT
 from utils import tools
 
 
@@ -38,3 +40,40 @@ def check_user_exists(nickname):
     """
     old_user_obj = User.query.filter(User.nickname == nickname).first()
     return old_user_obj
+
+
+def get_user_by_id(user_id):
+    """
+    检测此登录名的用户是否存在
+    :param user_id: 用户id
+    :return:
+    """
+    old_user_obj = User.query.filter(User.id == user_id).first()
+    return old_user_obj
+
+
+def modify_user(user_id, level=None, expire_time_str=None):
+    """
+    修改用户代理等级和过期时间
+    :param user_id:
+    :param level:
+    :param expire_time_str:
+    :return:
+    """
+    old_user_obj = get_user_by_id(user_id)
+    if not old_user_obj:
+        return 3
+    if level:
+        if level not in AGENT_LEVEL:
+            return 3
+        old_user_obj.level = level
+    if expire_time_str:
+        if expire_time_str not in EXPIRE_TIME_DICT:
+            return 3
+        if old_user_obj.expire_time:
+            old_user_obj.expire_time = old_user_obj.expire_time + datetime.timedelta(MONTH_DICT[expire_time_str])
+        else:
+            old_user_obj.expire_time = EXPIRE_TIME_DICT[expire_time_str](MONTH_DICT[expire_time_str])
+    db.session.add(old_user_obj)
+    db.session.commit()
+    return 1

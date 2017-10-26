@@ -52,7 +52,7 @@
                     <td><a href="{{ url_for('order.order_add_view', order_id=user.id) }}">{{ user_obj.id }}</a></td>
                     <td>{{ user_obj.nickname }}</td>
                     <td>{{ user_obj.real_name }}</td>
-                    <td>{{ user_obj.level }}</td>
+                    <td><button class="btn btn-info" onclick="select_modal({{ user_obj.id }})">{{ user_obj.level }}</button></td>
                     <td>{{ user_obj.expire_time }}</td>
                     <td>{{ user_obj.wechat }}</td>
                     <td>{{ user_obj.email }}</td>
@@ -73,6 +73,52 @@
     {% if page.total_page > 1 %}
         {{ limit_page(page.current_page, page.page_size, page.total_count, page.total_page, info={"name": "user_list"}) }}
     {% endif %}
+
+    <!-- 按钮触发模态框 -->
+    <!--<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#user-attr-modal">开始演示模态框</button>-->
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="user-attr-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">修改用户代理等级和过期时间</h4>
+                </div>
+                <div class="modal-body" style="height: 200px">
+                    <div class="form-horizontal">
+                        <div class="form-group" style="margin-top: 30px;">
+                            <label for="level" class="col-sm-2 control-label">代理等级</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="level" name="level">
+                                    <option value="">请选择代理等级</option>
+                                    {% for level in agent_level_list %}
+                                        <option value="{{ level }}">{{ agent_level_dict[level] }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-top: 30px;">
+                            <label for="expire_time_str" class="col-sm-2 control-label">过期时间</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="expire_time_str" name="expire_time_str">
+                                    <option value="">请选择过期时间</option>
+                                    {% for month in month_list %}
+                                        <option value="{{ month }}">{{ month_dict[month] }}天</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" onclick="submit_user_modify()">提交更改</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+
 {% endblock %}
 
 {% block ext_css %}
@@ -86,6 +132,29 @@
         function user_search() {
             var nickname = $("#nickname>input").val();
             window.location.href = '/auth/user/list/?nickname=' + nickname;
+        }
+
+        function select_modal(u_id) {
+            $('#user-attr-modal').attr('data-user-id', u_id);
+            $('#user-attr-modal').modal({
+                keyboard: true
+            });
+        }
+
+        function submit_user_modify() {
+            var csrf_token = '{{ csrf_token() }}';
+            var user_id = $('#user-attr-modal').attr('data-user-id');
+            var level = $("#level").val();
+            var expire_time_str = $("#expire_time_str").val();
+            $.ajax({
+                type: 'post',
+                url: '/auth/modify/' + user_id.toString() + '/user/',
+                data: {'level': level, 'csrf_token': csrf_token, 'expire_time_str': expire_time_str},
+                dataType: 'json',
+                success: function (data) {
+                    alert(data.msg);
+                }
+            })
         }
 
     </script>

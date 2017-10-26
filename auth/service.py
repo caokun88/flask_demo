@@ -45,3 +45,25 @@ def check_user_exists(nickname):
     """
     old_user_obj = modules.check_user_exists(nickname)
     return old_user_obj
+
+
+def get_user_by_id(user_id):
+    """
+    检测此登录名的用户是否存在
+    :param user_id: 用户id
+    :return:
+    """
+    old_user_obj = modules.get_user_by_id(user_id)
+    return old_user_obj
+
+
+def modify_user(user_id, level=None, expire_time_str=None):
+    """
+    修改用户代理等级和过期时间
+    :param user_id:
+    :param level:
+    :param expire_time_str:
+    :return:
+    """
+    msg = modules.modify_user(user_id, level=level, expire_time_str=expire_time_str)
+    return msg
