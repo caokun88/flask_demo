@@ -27,7 +27,7 @@ def order_list_view():
     project_id = request.args.get('project_id', '')
     keyword = request.args.get('keyword', '')
     current_page = request.args.get('current_page', 1)
-    page_size = request.args.get('page_size', 1)
+    page_size = request.args.get('page_size', 10)
     try:
         current_page = int(current_page)
         page_size = int(page_size)

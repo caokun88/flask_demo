@@ -117,7 +117,7 @@ def register_view():
 def user_list_view():
     nickname = request.args.get('nickname', '')
     current_page = request.args.get('current_page', 1)
-    page_size = request.args.get('page_size', 1)
+    page_size = request.args.get('page_size', 10)
     try:
         current_page = int(current_page)
         page_size = int(page_size)

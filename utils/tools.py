@@ -45,6 +45,8 @@ def format_fee(fee):
     :param fee: 金额 （分）
     :return: fee （元）
     """
+    if not fee:
+        fee = 0
     fee_float = round(fee / 100.0, 2)
     fee = int(fee_float) if fee_float == int(fee_float) else fee_float
     return fee
