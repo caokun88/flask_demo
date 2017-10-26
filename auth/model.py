@@ -24,6 +24,11 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128), nullable=False)
     wechat = db.Column(db.String(64))
+    level = db.Column(db.String(32), server_default='normal')  # 默认用户为普通代理（总代理all）
+    expire_time = db.Column(db.DATETIME)  # 过期时间，默认可以使用一周
+    login_count = db.Column(db.Integer, default=0)
+    login_last_time = db.Column(db.DATETIME)
+    login_last_ip = db.Column(db.String(64), server_default='')
     role_id = db.Column(db.ForeignKey('role.id'))
     role_obj = db.relationship('Role', backref=db.backref('user_set'))
     c_time = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp())

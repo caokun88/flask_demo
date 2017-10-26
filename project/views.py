@@ -18,7 +18,6 @@ from utils.respone_message import ok, bad_request
 
 @project_app.route('/list/')
 @login_required
-@decorator.require_permission
 def project_list_view():
     project_list = service.get_project_list(request.host_url)
     return render_template('admin/project_list.html', project_list=project_list)
@@ -30,8 +29,9 @@ def project_list_view():
 @decorator.require_permission
 def project_add_view(project_id=None):
     if request.method == 'POST':
-        name = request.form.get('name')
-        agent_fee = request.form.get('agent_fee')
+        name = request.form.get('name', '')
+        all_agent_fee = request.form.get('all_agent_fee', 0)
+        normal_agent_fee = request.form.get('normal_agent_fee', 0)
         selling_fee = request.form.get('selling_fee')
         file = request.files.get('icon')
         order_index = request.form.get('order_index')
@@ -39,7 +39,7 @@ def project_add_view(project_id=None):
             icon = tools.upload_file(file, 'upload')
         else:
             icon = ''
-        msg = service.add_or_modify_project(name, agent_fee, selling_fee, icon, order_index, project_id)
+        msg = service.add_or_modify_project(name, all_agent_fee, normal_agent_fee, selling_fee, icon, order_index, project_id)
         if msg == 1:
             return redirect(url_for('project.project_list_view'))
         elif msg == 2:

@@ -1,0 +1,16 @@
+.jump-to-input {
+    width: 60px;
+    border: 1px solid #ddd;
+    height: 35px;
+    margin-left: 4px;
+    text-indent: 8px;
+    border-radius: 5px;
+}
+
+.table {
+            text-align: center;
+}
+
+.table>tbody>tr>td {
+    vertical-align: middle;
+}

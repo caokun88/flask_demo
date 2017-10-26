@@ -12,6 +12,7 @@ import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CsrfProtect
+from blinker import Namespace
 
 from config import config
 
@@ -31,3 +32,5 @@ base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 static_dir = os.path.join(base_dir, 'static')
 
+test_signals = Namespace()
+model_test = test_signals.signal('model_test')

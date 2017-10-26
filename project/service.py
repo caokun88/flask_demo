@@ -18,7 +18,8 @@ def get_project(host_url, project_id):
         temp_data = {
             'id': project_obj.id,
             'name': project_obj.name,
-            'agent_fee': project_obj.agent_fee,
+            'all_agent_fee': project_obj.all_agent_fee if project_obj.all_agent_fee else 0,
+            'normal_agent_fee': project_obj.normal_agent_fee if project_obj.normal_agent_fee else 0,
             'selling_fee': project_obj.selling_fee,
             'icon': u'{}{}'.format(host_url, project_obj.icon) if project_obj.icon else '',
             'order_index': project_obj.order_index
@@ -40,7 +41,8 @@ def get_project_list(host_url):
         project_list.append({
             'id': project_obj.id,
             'name': project_obj.name,
-            'agent_fee': tools.format_fee(project_obj.agent_fee),
+            'all_agent_fee': tools.format_fee(project_obj.all_agent_fee) if project_obj.all_agent_fee else 0,
+            'normal_agent_fee': tools.format_fee(project_obj.normal_agent_fee) if project_obj.normal_agent_fee else 0,
             'selling_fee': tools.format_fee(project_obj.selling_fee),
             'icon': u'{}{}'.format(host_url, project_obj.icon) if project_obj.icon else '',
             'order_index': project_obj.order_index,
@@ -49,7 +51,7 @@ def get_project_list(host_url):
     return project_list
 
 
-def add_or_modify_project(name, agent_fee, selling_fee, icon, order_index, project_id=None):
+def add_or_modify_project(name, all_agent_fee, normal_agent_fee, selling_fee, icon, order_index, project_id=None):
     if project_id:
         # modify
         project_obj = PayProject.query.filter_by(id=project_id).first()
@@ -59,7 +61,8 @@ def add_or_modify_project(name, agent_fee, selling_fee, icon, order_index, proje
         project_obj = PayProject()
     try:
         project_obj.name = name
-        project_obj.agent_fee = agent_fee
+        project_obj.all_agent_fee = all_agent_fee
+        project_obj.normal_agent_fee = normal_agent_fee
         project_obj.selling_fee = selling_fee
         if icon:
             project_obj.icon = icon

@@ -37,26 +37,32 @@ def page_not_found_view(e):
 
 @app.context_processor
 def global_menu():
+    try:
+        role_obj = g.user.role_obj
+        is_show = lambda role: True if g.user.role_obj.role == 'super' or g.user.role_obj.role == role else False
+    except Exception as e:
+        is_show = lambda role: False
     menu_list = [
         {
             'parent_name': u'用户管理',
             'sub_list': [
-                {'name': u'添加用户', 'url': url_for('auth.register_view')},
-                {'name': u'退出', 'url': url_for('auth.logout_view')}
+                {'name': u'添加用户', 'url': url_for('auth.register_view'), 'is_show': is_show('super')},
+                {'name': u'用户列表', 'url': url_for('auth.user_list_view'), 'is_show': is_show('super')},
+                {'name': u'退出', 'url': url_for('auth.logout_view'), 'is_show': is_show('user')}
             ]
         },
         {
             'parent_name': u'商品管理',
             'sub_list': [
-                {'name': u'添加商品', 'url': url_for('project.project_add_view')},
-                {'name': u'商品列表', 'url': url_for('project.project_list_view')},
+                {'name': u'添加商品', 'url': url_for('project.project_add_view'), 'is_show': is_show('super')},
+                {'name': u'商品列表', 'url': url_for('project.project_list_view'), 'is_show': is_show('user')},
             ]
         },
         {
             'parent_name': u'订单管理',
             'sub_list': [
-                {'name': u'添加订单', 'url': url_for('order.order_add_view')},
-                {'name': u'订单列表', 'url': url_for('order.order_list_view')},
+                {'name': u'添加订单', 'url': url_for('order.order_add_view'), 'is_show': is_show('user')},
+                {'name': u'订单列表', 'url': url_for('order.order_list_view'), 'is_show': is_show('user')},
             ]
         }
     ]

@@ -12,3 +12,6 @@ DATE_TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 
 DATE_FORMAT = '%Y-%m-%d'
 
+CURRENT_PAGE = 1
+
+PAGE_SIZE = 10

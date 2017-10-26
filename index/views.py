@@ -16,7 +16,6 @@ from index import index_app
 @index_app.route('/index/', methods=['GET'])
 @index_app.route('/', methods=['GET'])
 @login_required
-@decorator.require_permission
 def index_view():
     return render_template('base/base.html')
 

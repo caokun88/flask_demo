@@ -24,7 +24,7 @@ class DevConfig(BaseConfig):
 
 class DeployConfig(BaseConfig):
     DEBUG = False
-    PERMANENT_SESSION_LIFETIME = 60 * 20
+    PERMANENT_SESSION_LIFETIME = 60 * 60
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:kunrui1314@127.0.0.1/flask_demo?charset=utf8mb4'
     SQLALCHEMY_BINDS = {
         'flask_demo': 'mysql+pymysql://root:kunrui1314@127.0.0.1/flask_demo?charset=utf8mb4'

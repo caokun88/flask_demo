@@ -6,6 +6,8 @@ create on 2017-10-17
 @author: cao kun
 """
 
+from flask import g
+
 from model import db, PayOrder
 from utils import tools
 from utils.constant import DATE_TIME_FORMAT
@@ -26,7 +28,7 @@ def add_order_model(order_id, project_id, real_fee, name, address, phone, pay_ty
     db.session.commit()
 
 
-def get_order_list_model(start_time, end_time, user, deleted=0):
+def get_order_list_model(start_time, end_time, project_id, keyword, user, current_page, page_size, deleted=0):
     order_obj_list = PayOrder.query.filter(PayOrder.deleted == deleted, PayOrder.user_id == user.id)
     if start_time:
         order_obj_list = order_obj_list.filter(
@@ -36,7 +38,16 @@ def get_order_list_model(start_time, end_time, user, deleted=0):
         order_obj_list = order_obj_list.filter(
             PayOrder.create_time <= end_time
         )
-    return order_obj_list
+    if project_id:
+        order_obj_list = order_obj_list.filter(PayOrder.project_id == project_id)
+    if keyword:
+        order_obj_list = order_obj_list.filter(PayOrder.phone == keyword)
+    total_count = order_obj_list.count()
+    if order_obj_list:
+        order_obj_list = order_obj_list.order_by(db.desc(PayOrder.id))
+        order_obj_list = order_obj_list.offset((current_page - 1) * page_size).limit(page_size)
+    page = tools.get_page(current_page, page_size, total_count)
+    return order_obj_list, page
 
 
 def delete_order_model(order_id, user):
@@ -55,21 +66,21 @@ service
 """
 
 
-def get_order_list_service(start_time, end_time, user, deleted=0):
-    order_obj_list = get_order_list_model(start_time, end_time, user, deleted=deleted)
+def get_order_list_service(start_time, end_time, project_id, keyword, user, current_page, page_size, deleted=0):
+    order_obj_list, page = get_order_list_model(start_time, end_time, project_id, keyword, user, current_page, page_size, deleted=deleted)
     order_list = list()
-    total_count = order_obj_list.count()
     total_flowing_fee = 0.0  # 流水
     total_profit_fee = 0.0  # 利润
     for order_obj in order_obj_list:
         project_obj = order_obj.project_obj
-        profit_fee = tools.format_fee(order_obj.real_fee) - tools.format_fee(project_obj.agent_fee)
+        agent_fee = tools.format_fee(project_obj.all_agent_fee) if g.user.level == 'all' else tools.format_fee(project_obj.normal_agent_fee)
+        profit_fee = tools.format_fee(order_obj.real_fee) - agent_fee
         selling_fee = tools.format_fee(project_obj.selling_fee)
         order_list.append({
             'id': order_obj.id,
             'project_id': project_obj.id,
             'project_name': project_obj.name,
-            'agent_fee': tools.format_fee(project_obj.agent_fee),
+            'agent_fee': agent_fee,
             'selling_fee': selling_fee,
             'real_fee': tools.format_fee(order_obj.real_fee),
             'profit_fee': profit_fee,
@@ -81,7 +92,7 @@ def get_order_list_service(start_time, end_time, user, deleted=0):
         })
         total_flowing_fee += selling_fee
         total_profit_fee += profit_fee
-    return order_list, total_count, total_flowing_fee, total_profit_fee
+    return order_list, page, total_flowing_fee, total_profit_fee
 
 
 def get_order_info(order_id):

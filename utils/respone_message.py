@@ -19,6 +19,7 @@ MESSAGE_DICT = {
     401: u'未授权（未登录）',
     403: u'没有访问权限',
     405: u'请求方式错误',
+    406: u'用户已过期',
 
     500: u'内部服务器错误',
 }
@@ -40,4 +41,5 @@ bad_request = partial(__basic_response, code=400)
 no_auth = partial(__basic_response, code=401)
 forbidden = partial(__basic_response, code=403)
 request_method_error = partial(__basic_response, 405)
+expire_request = partial(__basic_response, 406)
 error = partial(__basic_response, 500)

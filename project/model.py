@@ -17,7 +17,8 @@ class PayProject(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), nullable=False)
-    agent_fee = db.Column(db.Integer)
+    all_agent_fee = db.Column(db.Integer, default=0)
+    normal_agent_fee = db.Column(db.Integer, default=0)
     selling_fee = db.Column(db.Integer)
     icon = db.Column(db.String(255))
     order_index = db.Column(db.SmallInteger, index=True)  # 排序

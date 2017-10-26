@@ -8,4 +8,6 @@ create on 2017-10-13
 
 from flask import Blueprint
 
+import signal
+
 test_app = Blueprint('test', __name__)

@@ -6,6 +6,7 @@ create on 2017-10-17
 @author: cao kun
 """
 
+import datetime
 from StringIO import StringIO
 
 from flask import redirect, url_for, g, request, render_template, flash, session, make_response
@@ -14,6 +15,9 @@ from auth import lm, auth_app
 from model import User, Role, db
 from utils import decorator, captcha
 from settings import csrf
+from utils.respone_message import bad_request, expire_request
+from utils import tools
+import service
 
 
 @lm.user_loader
@@ -54,12 +58,17 @@ def login_view():
         nickname = request.form.get('nickname', '')
         password = request.form.get('password', '')
         captcha = request.form.get('captcha', '').upper()
+        old_user_obj = service.check_user_exists(nickname)
+        if old_user_obj and old_user_obj.expire_time:
+            if old_user_obj.expire_time <= datetime.datetime.now():
+                return expire_request()
         if captcha and captcha != session.get('captcha_code') or not captcha:
             flash(u'验证码错误')
             return redirect(url_for('auth.skip_view'))
         user = User.query.filter_by(nickname=nickname).first()
         if user is not None and user.verify_password(password):
             login_user(user)
+            session.permanent = True  # 只要用户活跃，session就是永久的
             return redirect(next_url or url_for('index.index_view'))
         else:
             flash(u'失败')
@@ -87,11 +96,35 @@ def register_view():
         role_obj = Role.query.filter_by(id=role_id).first()
         if not role_obj:
             flash(u'角色id不存在')
-        user = User(nickname=nickname, email=email, wechat=wechat, role_id=role_id, real_name=real_name)
-        user.set_password(password)
-        db.session.add(user)
-        db.session.commit()
-        return redirect(url_for('index.index_view'))
-        flash(u'添加成功')
+        old_user_obj = service.check_user_exists(nickname)
+        if not old_user_obj:
+            user = User(nickname=nickname, email=email, wechat=wechat, role_id=role_id, real_name=real_name)
+            user.expire_time = tools.get_n_day_before(7)
+            user.set_password(password)
+            db.session.add(user)
+            db.session.commit()
+            return redirect(url_for('index.index_view'))
+            flash(u'添加成功')
+        else:
+            flash(u'用户名存在')
     else:
         return render_template('register.html')
+
+
+@auth_app.route('/user/list/', methods=['GET'])
+@login_required
+@decorator.require_permission
+def user_list_view():
+    nickname = request.args.get('nickname', '')
+    current_page = request.args.get('current_page', 1)
+    page_size = request.args.get('page_size', 1)
+    try:
+        current_page = int(current_page)
+        page_size = int(page_size)
+    except Exception as e:
+        return bad_request()
+    user_list, page = service.get_user_list(nickname, current_page, page_size)
+    resp_data = {
+        'user_list': user_list, 'page': page, 'nickname': nickname
+    }
+    return render_template('admin/user_list.html', **resp_data)

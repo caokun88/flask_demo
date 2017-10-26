@@ -1,10 +1,12 @@
 {% extends "/base/base.html" %}
 
+{% from 'base/paginate.html' import limit_page %}
+
 {% block title %}订单列表{% endblock %}
 
 {% block content %}
     <div class="row">
-        <div class='col-sm-5'>
+        <div class='col-sm-6'>
             <div class="form-group">
                 <label>起始时间：</label>
                 <!--指定 date标记-->
@@ -16,7 +18,7 @@
                 </div>
             </div>
         </div>
-        <div class='col-sm-5'>
+        <div class='col-sm-6'>
             <div class="form-group">
                 <label>结束时间：</label>
                 <!--指定 date标记-->
@@ -28,7 +30,26 @@
                 </div>
             </div>
         </div>
-        <div class='col-sm-2'>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label></label>
+                <select class="form-control" id="project_id" name="project_id">
+                    <option value="">商品名称筛选</option>
+                    {% for p in project_list %}
+                        <option value="{{ p.id }}" {% if project_id == p.id %} selected {% endif %}>{{ p.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class='col-sm-3'>
+            <div class="form-group">
+                <label></label>
+                <input type='text' class="form-control" value="{{ keyword }}" id="keyword" placeholder="收货人手机号" />
+            </div>
+        </div>
+        <div class='col-sm-3'>
             <div class="form-group">
                 <label></label>
                 <button class="btn btn-primary form-control" onclick="order_search()">搜索</button>
@@ -36,7 +57,7 @@
         </div>
     </div>
     <div class="container" style="height: 40px; line-height: 40px;">
-        <div class="">总订单数：{{ total_count }}，总流水：{{ total_flowing_fee }}，总利润：{{ total_profit_fee }}</div>
+        <div class="">总订单数：{{ page.total_count }}，总流水：{{ total_flowing_fee }}，总利润：{{ total_profit_fee }}，总页数：{{ page.total_page }}</div>
     </div>
     {% if order_list %}
         <div class="table-responsive">
@@ -82,23 +103,20 @@
             <div class="">暂无订单</div>
         </div>
     {% endif %}
+    {% if page.total_page > 1 %}
+        {{ limit_page(page.current_page, page.page_size, page.total_count, page.total_page, info={"name": "order_list"}) }}
+    {% endif %}
 {% endblock %}
 
 {% block ext_css %}
     <link href="{{ url_for('static', filename='css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet" />
-    <style>
-        .table {
-            text-align: center;
-        }
-        .table>tbody>tr>td {
-            vertical-align: middle;
-        }
-    </style>
+    <link href="{{ url_for('static', filename='css/util.css') }}" rel="stylesheet">
 {% endblock %}
 
 {% block ext_js %}
     <script src="{{ url_for('static', filename='js/bootstrap-datetimepicker.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap-datetimepicker.zh-CN.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/limit-pager.js') }}"></script>
     <script>
         // ajax 删除订单
         function delete_order(order_id) {
@@ -144,7 +162,10 @@
         function order_search() {
             var start_time = $("#datetimepicker1>input").val();
             var end_time = $("#datetimepicker2>input").val();
-            window.location.href = '/order/list/?start_time=' + start_time + '&end_time=' + end_time;
+            var project_id = $("#project_id").val();
+            var keyword = $("#keyword").val();
+            window.location.href = '/order/list/?start_time=' + start_time + '&end_time=' + end_time +
+                '&project_id=' + project_id + '&keyword=' + keyword;
         }
 
     </script>

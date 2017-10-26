@@ -13,7 +13,7 @@ from flask_login import login_required
 
 from order import order_app
 from utils import decorator
-from utils.respone_message import ok
+from utils.respone_message import ok, bad_request
 import service
 from project import service as project_service
 from utils.constant import DATE_FORMAT
@@ -21,17 +21,26 @@ from utils.constant import DATE_FORMAT
 
 @order_app.route('/list/')
 @login_required
-@decorator.require_permission
 def order_list_view():
     start_time = request.args.get('start_time', '')
     end_time = request.args.get('end_time', '')
+    project_id = request.args.get('project_id', '')
+    keyword = request.args.get('keyword', '')
+    current_page = request.args.get('current_page', 1)
+    page_size = request.args.get('page_size', 1)
+    try:
+        current_page = int(current_page)
+        page_size = int(page_size)
+    except Exception as e:
+        return bad_request()
     if not any([start_time, end_time]):
         start_time = datetime.datetime.now().strftime(DATE_FORMAT)
-    order_list, total_count, total_flowing_fee, total_profit_fee = \
-        service.get_order_list_service(start_time, end_time, g.user)
+    order_list, page, total_flowing_fee, total_profit_fee = \
+        service.get_order_list_service(start_time, end_time, project_id, keyword, g.user, current_page, page_size)
+    project_list = project_service.get_project_list(request.host_url)
     resp_data = {
-        'order_list': order_list, 'start_time': start_time, 'end_time': end_time, 'total_count': total_count,
-        'total_flowing_fee': total_flowing_fee, 'total_profit_fee': total_profit_fee
+        'order_list': order_list, 'start_time': start_time, 'end_time': end_time, 'page': page,
+        'total_flowing_fee': total_flowing_fee, 'total_profit_fee': total_profit_fee, 'project_list': project_list
     }
     return render_template('admin/order_list.html', **resp_data)
 
@@ -39,7 +48,6 @@ def order_list_view():
 @order_app.route('/add/', methods=['POST', 'GET'])
 @order_app.route('/modify/<int:order_id>/', methods=['POST', 'GET'])
 @login_required
-@decorator.require_permission
 def order_add_view(order_id=None):
     if request.method == 'POST':
         real_fee = request.form.get('real_fee')
@@ -54,13 +62,11 @@ def order_add_view(order_id=None):
     else:
         project_list = project_service.get_project_list(request.host_url)
         order_info = service.get_order_info(order_id)
-        print order_info
         return render_template('admin/order_add.html', project_list=project_list, order_info=order_info)
 
 
 @order_app.route('/delete/<int:order_id>/', methods=['POST'])
 @login_required
-@decorator.require_permission
 def order_deleted_view(order_id):
     service.delete_order_model(order_id, g.user)
     return ok()

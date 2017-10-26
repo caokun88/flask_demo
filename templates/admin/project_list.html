@@ -10,7 +10,8 @@
                     <td>商品id</td>
                     <td>icon</td>
                     <td>商品名称</td>
-                    <td>代理金额</td>
+                    <td>总代金额</td>
+                    <td>普代金额</td>
                     <td>出售金额</td>
                     <td>优先级</td>
                     <td>创建时间</td>
@@ -22,7 +23,8 @@
                         <td>{{ project.id }}</td>
                         <td>{% if project.icon %}<img width="50" height="50" src="{{ project.icon }}">{% else %}暂无icon图{% endif %}</td>
                         <td><a href="{{ url_for('project.project_add_view', project_id=project.id) }}">{{ project.name }}</a></td>
-                        <td>{{ project.agent_fee }}</td>
+                        <td>{{ project.all_agent_fee }}</td>
+                        <td>{{ project.normal_agent_fee }}</td>
                         <td>{{ project.selling_fee }}</td>
                         <td>{{ project.order_index }}</td>
                         <td>{{ project.create_time }}</td>

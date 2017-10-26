@@ -1,0 +1,92 @@
+{% extends "/base/base.html" %}
+
+{% from 'base/paginate.html' import limit_page %}
+
+{% block title %}用户列表{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class='col-sm-5'>
+            <div class="form-group">
+                <label>用户登录名：</label>
+                <!--指定 date标记-->
+                <div class='input-group date' id='nickname'>
+                    <input type='text' class="form-control" value="{{ nickname }}" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class='col-sm-2'>
+            <div class="form-group">
+                <label></label>
+                <button class="btn btn-primary form-control" onclick="user_search()">搜索</button>
+            </div>
+        </div>
+    </div>
+    <div class="container" style="height: 40px; line-height: 40px;">
+        <div class="">用户总数：{{ page.total_count }}，总页数：{{ page.total_page }}</div>
+    </div>
+    {% if user_list %}
+        <div class="table-responsive">
+        <table class="table table-hover">
+        <thead>
+            <tr>
+                <td>用户id</td>
+                <td>登录名</td>
+                <td>真实姓名</td>
+                <td>级别</td>
+                <td>到期时间</td>
+                <td>微信</td>
+                <td>邮箱</td>
+                <td>登录次数</td>
+                <td>最后登录时间</td>
+                <td>最后登录IP</td>
+                <td>创建时间</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user_obj in user_list %}
+                <tr>
+                    <td><a href="{{ url_for('order.order_add_view', order_id=user.id) }}">{{ user_obj.id }}</a></td>
+                    <td>{{ user_obj.nickname }}</td>
+                    <td>{{ user_obj.real_name }}</td>
+                    <td>{{ user_obj.level }}</td>
+                    <td>{{ user_obj.expire_time }}</td>
+                    <td>{{ user_obj.wechat }}</td>
+                    <td>{{ user_obj.email }}</td>
+                    <td>{{ user_obj.login_count }}</td>
+                    <td>{{ user_obj.login_last_time }}</td>
+                    <td>{{ user_obj.login_last_ip }}</td>
+                    <td>{{ user_obj.create_time }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+    {% else %}
+        <div class="container" style="height: 300px; line-height: 300px; text-align: center">
+            <div class="">暂无用户信息</div>
+        </div>
+    {% endif %}
+    {% if page.total_page > 1 %}
+        {{ limit_page(page.current_page, page.page_size, page.total_count, page.total_page, info={"name": "user_list"}) }}
+    {% endif %}
+{% endblock %}
+
+{% block ext_css %}
+    <link href="{{ url_for('static', filename='css/util.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block ext_js %}
+    <script src="{{ url_for('static', filename='js/limit-pager.js') }}"></script>
+    <script>
+        // 搜索
+        function user_search() {
+            var nickname = $("#nickname>input").val();
+            window.location.href = '/auth/user/list/?nickname=' + nickname;
+        }
+
+    </script>
+{% endblock %}

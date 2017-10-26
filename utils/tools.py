@@ -8,6 +8,8 @@ create on 2017-10-13
 
 import os
 import uuid
+import math
+import datetime
 
 from flask import request
 from settings import static_dir
@@ -57,3 +59,30 @@ def is_ajax():
     if ajax == 'XMLHttpRequest':
         return True
     return False
+
+
+def get_page(current_page, page_size, total_count):
+    """
+    获取分页的数据
+    :param current_page: 当前页
+    :param page_size: 也容量
+    :param total_count: 总数量
+    :return: page
+    :rtype dict
+    """
+    total_page = int(math.ceil(total_count / float(page_size)))
+    page = {
+        'current_page': current_page, 'page_size': page_size, 'total_count': total_count, 'total_page': total_page
+    }
+    return page
+
+
+def get_n_day_before(n_day):
+    """
+    获取几天前或者几天后的日期
+    :param n_day: 天数
+    :return:
+    """
+    now = datetime.datetime.now()
+    n_datetime = now + datetime.timedelta(days=n_day)
+    return n_datetime

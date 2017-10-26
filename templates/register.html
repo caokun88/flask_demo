@@ -6,6 +6,7 @@
 
     <div>
         <form name="my_form" method="post" class="form-horizontal" role="form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
             <div class="form-group">
                 <label for="nickname" class="col-sm-2 control-label">用户名</label>
                 <div class="col-sm-10">

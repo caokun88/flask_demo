@@ -1,0 +1,26 @@
+{% macro limit_page(current_page, page_size, total_count, total_page, info={}) -%}
+    <ul class="pagination" style="cursor: pointer">
+        {% if current_page > 1 %}
+            <li><a onclick="jumpto('{{ info.name }}', 1, '{{ page_size }}', '{{ total_page }}')">首页</a></li>
+            <li><a onclick="jumpto('{{ info.name }}', '{{ current_page - 1 }}', '{{ page_size }}', '{{ total_page }}')">上一页</a></li>
+        {% endif %}
+        {% for p in range(1, total_page + 1) %}
+            {% if current_page == p %}
+                <li class="active"><a>{{ p }}</a></li>
+            {% elif current_page - p <= 3 %}
+                <li><a onclick="jumpto('{{ info.name }}', '{{ p }}', '{{ page_size }}', '{{ total_page }}')">{{ p }}</a></li>
+            {% elif current_page - p >= 3 %}
+                <li><a onclick="jumpto('{{ info.name }}', '{{ p }}', '{{ page_size }}', '{{ total_page }}')">{{ p }}</a></li>
+            {% endif %}
+        {% endfor %}
+        {% if current_page < total_page %}
+            <li><a onclick="jumpto('{{ info.name }}', '{{ current_page + 1 }}', '{{ page_size }}', '{{ total_page }}')">下一页</a></li>
+            <li><a onclick="jumpto('{{ info.name }}', '{{ total_page }}', '{{ page_size }}', '{{ total_page }}')">尾页</a></li>
+        {% endif %}
+        <input type="text" id="input-jump" placeholder="跳转到" class="jump-to-input">
+        <button class="btn btn-primary" onclick="jumpto('{{ info.name }}', '?', '{{ page_size }}', '{{ total_page }}')">go</button>
+    </ul>
+
+
+
+{%- endmacro %}
