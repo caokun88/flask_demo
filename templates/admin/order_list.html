@@ -56,11 +56,11 @@
             </div>
         </div>
     </div>
-    <div class="container" style="height: 40px; line-height: 40px;">
-        <div class="">总订单数：{{ page.total_count }}，总流水：{{ total_flowing_fee }}，总利润：{{ total_profit_fee }}，总页数：{{ page.total_page }}</div>
+    <div class="container">
+        <div class="row">总订单数：{{ page.total_count }}，总流水：{{ total_flowing_fee }}，当页利润：{{ total_profit_fee }}，总利润：{{ all_profit_fee }}</div>
     </div>
     {% if order_list %}
-        <div class="table-responsive">
+        <div class="table-responsive" style="margin-top: 10px">
         <table class="table table-hover">
         <thead>
             <tr>

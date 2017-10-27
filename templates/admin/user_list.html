@@ -25,11 +25,11 @@
             </div>
         </div>
     </div>
-    <div class="container" style="height: 40px; line-height: 40px;">
-        <div class="">用户总数：{{ page.total_count }}，总页数：{{ page.total_page }}</div>
+    <div class="container">
+        <div class="row">用户总数：{{ page.total_count }}，总页数：{{ page.total_page }}</div>
     </div>
     {% if user_list %}
-        <div class="table-responsive">
+        <div class="table-responsive" style="margin-top: 10px">
         <table class="table table-hover">
         <thead>
             <tr>

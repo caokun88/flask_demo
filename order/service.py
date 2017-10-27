@@ -6,9 +6,12 @@ create on 2017-10-17
 @author: cao kun
 """
 
+import operator
+
 from flask import g
 
 from model import db, PayOrder
+from project.model import PayProject
 from utils import tools
 from utils.constant import DATE_TIME_FORMAT
 
@@ -48,6 +51,38 @@ def get_order_list_model(start_time, end_time, project_id, keyword, user, curren
         order_obj_list = order_obj_list.offset((current_page - 1) * page_size).limit(page_size)
     page = tools.get_page(current_page, page_size, total_count)
     return order_obj_list, page
+
+
+def order_statistics(start_time, end_time, project_id, keyword, user, deleted=0):
+    """
+    订单统计
+    :param start_time:
+    :param end_time:
+    :param project_id:
+    :param keyword:
+    :param user:
+    :param deleted:
+    :return: (real_fee, normal_agent_fee, all_agent_fee)
+    """
+    order_obj_list = db.session.query(
+        db.func.sum(PayOrder.real_fee), db.func.sum(PayProject.normal_agent_fee), db.func.sum(PayProject.all_agent_fee)
+    ).join(PayProject, PayOrder.project_id==PayProject.id).filter(
+        PayOrder.deleted == deleted, PayOrder.user_id == user.id
+    )
+    if start_time:
+        order_obj_list = order_obj_list.filter(
+            PayOrder.create_time >= start_time
+        )
+    if end_time:
+        order_obj_list = order_obj_list.filter(
+            PayOrder.create_time <= end_time
+        )
+    if project_id:
+        order_obj_list = order_obj_list.filter(PayOrder.project_id == project_id)
+    if keyword:
+        order_obj_list = order_obj_list.filter(PayOrder.phone == keyword)
+
+    return order_obj_list.first()
 
 
 def delete_order_model(order_id, user):
@@ -92,7 +127,10 @@ def get_order_list_service(start_time, end_time, project_id, keyword, user, curr
         })
         total_flowing_fee += selling_fee
         total_profit_fee += profit_fee
-    return order_list, page, total_flowing_fee, total_profit_fee
+    real_fee, normal_agent_fee, all_agent_fee = order_statistics(start_time, end_time, project_id, keyword, user, deleted=0)
+    temp_agent_fee = normal_agent_fee if user.level == 'normal' else all_agent_fee
+    all_profit_fee = tools.format_fee(float(real_fee - temp_agent_fee))
+    return order_list, page, total_flowing_fee, total_profit_fee, all_profit_fee
 
 
 def get_order_info(order_id):
