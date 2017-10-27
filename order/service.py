@@ -104,8 +104,8 @@ service
 def get_order_list_service(start_time, end_time, project_id, keyword, user, current_page, page_size, deleted=0):
     order_obj_list, page = get_order_list_model(start_time, end_time, project_id, keyword, user, current_page, page_size, deleted=deleted)
     order_list = list()
-    total_flowing_fee = 0.0  # 流水
-    total_profit_fee = 0.0  # 利润
+    total_flowing_fee = 0  # 流水
+    total_profit_fee = 0  # 利润
     for order_obj in order_obj_list:
         project_obj = order_obj.project_obj
         agent_fee = tools.format_fee(project_obj.all_agent_fee) if g.user.level == 'all' else tools.format_fee(project_obj.normal_agent_fee)
@@ -129,6 +129,10 @@ def get_order_list_service(start_time, end_time, project_id, keyword, user, curr
         total_profit_fee += profit_fee
     real_fee, normal_agent_fee, all_agent_fee = order_statistics(start_time, end_time, project_id, keyword, user, deleted=0)
     temp_agent_fee = normal_agent_fee if user.level == 'normal' else all_agent_fee
+    if not real_fee:
+        real_fee = 0
+    if not temp_agent_fee:
+        temp_agent_fee = 0
     all_profit_fee = tools.format_fee(float(real_fee - temp_agent_fee))
     return order_list, page, total_flowing_fee, total_profit_fee, all_profit_fee
 
