@@ -43,6 +43,7 @@ def order_list_view():
         'total_flowing_fee': total_flowing_fee, 'total_profit_fee': total_profit_fee, 'project_list': project_list,
         'project_id': project_id, 'keyword': keyword, 'all_profit_fee': all_profit_fee
     }
+    
     return render_template('admin/order_list.html', **resp_data)
 
 
