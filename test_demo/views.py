@@ -12,6 +12,7 @@ from flask import request
 import service
 from test_demo import test_app
 from utils.respone_message import ok
+from tasks.test import test_celery
 
 
 @test_app.route('/')
@@ -37,3 +38,11 @@ def test_modify_role_view(role_id):
 def test_backref_view():
     service.back_ref_test()
     return 'oks'
+
+
+@test_app.route('/celery/')
+def celery_test_view():
+    x = request.args.get('x', '13')
+    y = request.args.get('y', '14')
+    test_celery.delay(x, y)
+    return ok()

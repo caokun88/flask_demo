@@ -11,9 +11,14 @@ import uuid
 import math
 import datetime
 
-from flask import request
+import xlwt
+
+from StringIO import StringIO
+from flask import request, make_response
 from settings import static_dir
 from utils.constant import ALLOWED_EXTENSIONS
+
+from utils.constant import DATE_TIME_FORMAT_2
 
 
 def allowed_file(filename):
@@ -88,3 +93,27 @@ def get_n_day_before(n_day):
     now = datetime.datetime.now()
     n_datetime = now + datetime.timedelta(days=n_day)
     return n_datetime
+
+
+def download_excel(header_list, content_list):
+    """
+    导出excel
+    :param header_list: 头list
+    :param content_list: content list 二维数组
+    :return:
+    """
+    wb = xlwt.Workbook(encoding='utf8')
+    ws = wb.add_sheet('rfr')
+    for i, header in enumerate(header_list):
+        ws.write(0, i, header)
+    for j, contents in enumerate(content_list, start=1):
+        for n, content in enumerate(contents):
+            ws.write(j, n, content)
+    buf = StringIO()
+    wb.save(buf)
+    response = make_response(buf.getvalue())
+    response.headers['Content-Type'] = "application/vnd.ms-excel"
+    response.headers['Content-Disposition'] = 'attachment; filename=订单{}.xls'.format(
+        datetime.datetime.now().strftime(DATE_TIME_FORMAT_2)
+    )
+    return response

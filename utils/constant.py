@@ -15,6 +15,8 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 DATE_TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 
+DATE_TIME_FORMAT_2 = '%Y-%m-%d_%H:%M:%S'
+
 DATE_FORMAT = '%Y-%m-%d'
 
 CURRENT_PAGE = 1

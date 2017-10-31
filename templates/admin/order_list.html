@@ -32,7 +32,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-3">
             <div class="form-group">
                 <label></label>
                 <select class="form-control" id="project_id" name="project_id">
@@ -55,9 +55,19 @@
                 <button class="btn btn-primary form-control" onclick="order_search()">搜索</button>
             </div>
         </div>
+        <div class='col-sm-3'>
+            <div class="form-group">
+               <label></label>
+                <button class="btn btn-primary form-control" onclick="download_order()">导出excel</button>
+            </div>
+        </div>
+
     </div>
     <div class="container">
-        <div class="row">总订单数：{{ page.total_count }}，总流水：{{ total_flowing_fee }}，当页利润：{{ total_profit_fee }}，总利润：{{ all_profit_fee }}</div>
+        <div class="row">
+            总订单数：{{ page.total_count }}，当页总流水：{{ total_flowing_fee }}，当页利润：{{ total_profit_fee }}，
+            总利润：{{ all_profit_fee }}，总代理金额：{{ all_agent_fee }}
+        </div>
     </div>
     {% if order_list %}
         <div class="table-responsive" style="margin-top: 10px">
@@ -165,6 +175,16 @@
             var project_id = $("#project_id").val();
             var keyword = $("#keyword").val();
             window.location.href = '/order/list/?start_time=' + start_time + '&end_time=' + end_time +
+                '&project_id=' + project_id + '&keyword=' + keyword;
+        }
+
+        // 导出excel
+        function download_order() {
+            var start_time = $("#datetimepicker1>input").val();
+            var end_time = $("#datetimepicker2>input").val();
+            var project_id = $("#project_id").val();
+            var keyword = $("#keyword").val();
+            window.location.href = '/order/download/?start_time=' + start_time + '&end_time=' + end_time +
                 '&project_id=' + project_id + '&keyword=' + keyword;
         }
 

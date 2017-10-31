@@ -9,7 +9,7 @@ create on 2017-10-13
 
 class BaseConfig(object):  # 基本配置类
     SECRET_KEY = 'asdasdfadsfadsfadfafdsa'
-    PERMANENT_SESSION_LIFETIME = 60 * 60 * 2
+    PERMANENT_SESSION_LIFETIME = 60 * 60 * 10
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     DEBUG = True
     ITEMS_PER_PAGE = 10
