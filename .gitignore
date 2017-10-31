@@ -1,7 +1,7 @@
 *.log
 *.pot
 *.pyc
-.idea/workspace.xml
+.idea/
 *.xls
 .DS_Store
 *.sh
