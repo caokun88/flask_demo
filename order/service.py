@@ -161,7 +161,8 @@ def order_statics_service(start_time, end_time, project_id, keyword, user, delet
     if not temp_agent_fee:
         temp_agent_fee = 0
     all_profit_fee = tools.format_fee(float(real_fee - temp_agent_fee))
-    return all_profit_fee, tools.format_fee(float(temp_agent_fee))
+    all_flowing_fee = tools.format_fee(float(real_fee))
+    return all_profit_fee, tools.format_fee(float(temp_agent_fee)), all_flowing_fee
 
 
 def get_order_download_service(start_time, end_time, project_id, keyword, user, current_page, page_size, deleted=0, label='download'):

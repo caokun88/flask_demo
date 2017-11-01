@@ -37,12 +37,13 @@ def order_list_view():
         start_time = datetime.datetime.now().strftime(DATE_FORMAT)
     order_list, page, total_flowing_fee, total_profit_fee = \
         service.get_order_list_service(start_time, end_time, project_id, keyword, g.user, current_page, page_size)
-    all_profit_fee, all_agent_fee = service.order_statics_service(start_time, end_time, project_id, keyword, g.user)
+    all_profit_fee, all_agent_fee, all_flowing_fee = service.order_statics_service(start_time, end_time, project_id, keyword, g.user)
     project_list = project_service.get_project_list(request.host_url)
     resp_data = {
         'order_list': order_list, 'start_time': start_time, 'end_time': end_time, 'page': page,
         'total_flowing_fee': total_flowing_fee, 'total_profit_fee': total_profit_fee, 'project_list': project_list,
-        'project_id': project_id, 'keyword': keyword, 'all_profit_fee': all_profit_fee, 'all_agent_fee': all_agent_fee
+        'project_id': project_id, 'keyword': keyword, 'all_profit_fee': all_profit_fee, 'all_agent_fee': all_agent_fee,
+        'all_flowing_fee': all_flowing_fee
     }
     
     return render_template('admin/order_list.html', **resp_data)
