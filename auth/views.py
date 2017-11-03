@@ -43,9 +43,8 @@ def captcha_view():
     img, range_str = captcha.generate_captcha()
     session['captcha_code'] = range_str.upper()
     buf = StringIO()
-    img.save(buf, 'JPEG', quality=60)
-    buffer_str = buf.getvalue()
-    response = make_response(buffer_str)
+    img.save(buf, 'png')
+    response = make_response(buf.getvalue())
     response.headers['Content-Type'] = 'image/jpeg'
     return response
 

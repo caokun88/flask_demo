@@ -7,12 +7,14 @@ create on 2017-10-13
 """
 
 
-from flask import request
+from flask import request, make_response
 
 import service
 from test_demo import test_app
 from utils.respone_message import ok
 from tasks.test import test_celery
+from utils import qr_code
+from cStringIO import StringIO
 
 
 @test_app.route('/')
@@ -46,3 +48,13 @@ def celery_test_view():
     y = request.args.get('y', '14')
     test_celery.delay(x, y)
     return ok()
+
+
+@test_app.route('/qrcode/')
+def qrcode_test_view():
+    qr_img = qr_code.general_qrcode(is_use_icon=True)
+    buf = StringIO()
+    qr_img.save(buf, 'png')
+    response = make_response(buf.getvalue())
+    response.headers['Content-Type'] = 'image/jpeg'
+    return response
