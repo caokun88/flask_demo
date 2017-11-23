@@ -7,12 +7,14 @@ create on 2017-11-23
 """
 
 import time
+import urllib
+import base64
 
-from flask import request, render_template
+from flask import request, render_template, session, redirect, url_for
 from settings import csrf, redis_conn
 from wechat import wechat_app
 from utils.constant import CLICK_DICT, DICT
-from utils.wechat_api import api_get_js_ticket
+from utils.wechat_api import api_get_js_ticket, api_get_web_access_token, api_get_web_user_info
 from utils.respone_message import ok
 from utils.wechat_tools import check_from_wechat_signature, get_xml_from_dict, get_dict_from_xml, Sign
 
@@ -125,3 +127,35 @@ def api_wechat_sign_view():
     sign_info['app_id'] = DICT['app_id']
     sign_info.pop('jsapi_ticket', '')
     return ok(data=sign_info)
+
+
+@wechat_app.route('/auth-login-after')
+def auth_login_after_view():
+    print 's'
+    if not session.get('openid'):
+        code_url = url_for('wechat.auth_login_code_view')
+        encode_url = urllib.quote(code_url)
+        state = base64.b64encode(request.url)
+        redirect_url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid={}&redirect_uri={}&' \
+                       'response_type=code&scope=snsapi_userinfo&state={}#wechat_redirect'.format(
+            DICT['app_id'], encode_url, state
+        )
+        return redirect(redirect_url)
+    return render_template('wechat/auth_login_after.html')
+
+
+@wechat_app.route('/auth-login-code')
+def auth_login_code_view():
+    code = request.values.get('code')
+    if code:
+        resp_dict = api_get_web_access_token(code)
+        access_token = resp_dict.get('access_token', '')
+        openid = resp_dict.get('openid', '')
+        # 拉取用户信息
+        user_info = api_get_web_user_info(access_token, openid)
+        print user_info
+        if 'nickname' in user_info:
+            session['wechat_nickname'] = user_info.get('nickname')
+    else:
+        session['wechat_nickname'] = 'ck'
+    return redirect(url_for('wechat.auth_login_after_view'))
