@@ -15,7 +15,7 @@ from utils.wechat_tools import CLICK_DICT, check_from_wechat_signature, get_xml_
 
 
 @csrf.exempt
-@wechat_app.route('/callback/')
+@wechat_app.route('/callback/', methods=['GET', 'POST'])
 def callback_view():
     signature = request.values.get('signature', '')
     timestamp = request.values.get('timestamp', '')
