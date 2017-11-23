@@ -7,16 +7,30 @@ import string
 import time
 
 from bs4 import BeautifulSoup, CData
-
-APP_ID = 'wx23d18fcf079cb4c4'
-APP_SECRET = 'de0bd67ab3c763e0f274f7fa394ea4d0'
-WECHAT_CHECK_TOKEN = 'caokun'
-CLICK_CONTACT_CUSTOMER_KEY = 'contact-1'
-CLICK_DICT = {
-    CLICK_CONTACT_CUSTOMER_KEY: "如有问题，可联系-小蕊（微信号：kunrui_1314，电话：18810433987）"
-}
+from constant import PAY_DICT, DICT
 
 
+def get_wechat_pay_sign(params_dict):
+    """
+    微信关于支付生成的sign签名
+    :param params_dict: 需要参加签名的数据
+    :return: sign
+    :rtype: str
+    """
+    keys = params_dict.keys()
+    keys.sort()
+    sign_str_arr = []
+    for key in keys:
+        if params_dict[key]:
+            if isinstance(params_dict[key], int):
+                value = str(params_dict[key])
+            else:
+                value = params_dict[key].encode("utf-8")
+            sign_str_arr.append("=".join([key, value]))
+    sign_str_arr.append("=".join(["key", PAY_DICT['key']]))
+    sign_str = "&".join(sign_str_arr)
+    sign = hashlib.md5(sign_str).hexdigest().upper()
+    return sign
 
 
 def check_from_wechat_signature(signature, timestamp, nonce):
@@ -27,7 +41,7 @@ def check_from_wechat_signature(signature, timestamp, nonce):
     :param nonce:
     :return: bool
     """
-    info_str = ''.join(sorted([WECHAT_CHECK_TOKEN, timestamp, nonce]))
+    info_str = ''.join(sorted([DICT['token'], timestamp, nonce]))
     hash_str = hashlib.sha1(info_str).hexdigest()
     if hash_str == signature:
         return True
@@ -76,13 +90,36 @@ def get_dict_from_xml(xml_str):
     return data
 
 
+def check_xml_sign(xml):
+    """
+    校验sign
+    :param xml: xml
+    :rtype: bool
+    """
+    data = get_dict_from_xml(xml)
+    sign = data.pop('sign', None)
+    x_sign = get_wechat_pay_sign(data)
+    return x_sign == sign
+
+
+def generate_nonce_str(length=32):
+    """
+    生成length位的随机字符串，默认32位
+    :return: nonce_str
+    :rtype: str
+    """
+    template_str = string.ascii_letters + string.ascii_letters
+    nonce_str = ''.join([random.choice(template_str) for _ in range(length)])
+    return nonce_str
+
+
 class Sign:
 
     """微信分享用到的sign"""
 
     def __init__(self, jsapi_ticket, url):
         self.ret = {
-            'nonceStr': self.__create_nonce_str(),
+            'noncestr': self.__create_nonce_str(),
             'jsapi_ticket': jsapi_ticket,
             'timestamp': self.__create_timestamp(),
             'url': url

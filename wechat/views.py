@@ -8,10 +8,13 @@ create on 2017-11-23
 
 import time
 
-from flask import request
-from settings import csrf
+from flask import request, render_template
+from settings import csrf, redis_conn
 from wechat import wechat_app
-from utils.wechat_tools import CLICK_DICT, check_from_wechat_signature, get_xml_from_dict, get_dict_from_xml
+from utils.constant import CLICK_DICT, DICT
+from utils.wechat_api import __api_get_access_token
+from utils.respone_message import ok
+from utils.wechat_tools import check_from_wechat_signature, get_xml_from_dict, get_dict_from_xml, Sign
 
 
 @csrf.exempt
@@ -102,3 +105,23 @@ def callback_view():
             xml_str = get_xml_from_dict(resp_data)
             return xml_str
     return ''
+
+
+@wechat_app.route('/share/')
+def share_view():
+    return render_template('wechat/share.html')
+
+
+@wechat_app.route('/api/sign/', methods=['POST', 'GET'])
+def api_wechat_sign_view():
+    """
+    分享的sign
+    :return:
+    """
+    url = request.values.get('url')
+    access_token = __api_get_access_token()
+    sign_obj = Sign(access_token, url)
+    sign_info = sign_obj.sign()
+    sign_info['app_id'] = DICT['app_id']
+    sign_info.pop('jsapi_ticket', '')
+    return ok(data=sign_info)

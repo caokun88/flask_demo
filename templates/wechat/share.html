@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" name="csrf-token" content="{{ csrf_token() }}">
+    <title>微信分享页面</title>
+    <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="{{ url_for('static', filename='js/share.js') }}"></script>
+</head>
+<body>
+    <h1>微信分享测试一下</h1>
+    <script>
+        $(function () {
+            wechat_share();
+        })
+    </script>
+</body>
+</html>

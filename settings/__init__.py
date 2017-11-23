@@ -8,6 +8,7 @@ create on 2017-10-11
 
 import platform
 import os
+import redis
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
@@ -34,3 +35,13 @@ static_dir = os.path.join(base_dir, 'static')
 
 test_signals = Namespace()
 model_test = test_signals.signal('model_test')
+
+# redis
+pool = redis.ConnectionPool(
+    host='127.0.0.1',
+    port=6379,
+    db=0,
+    password=None
+)
+
+redis_conn = redis.StrictRedis(connection_pool=pool)
