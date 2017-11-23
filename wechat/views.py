@@ -132,7 +132,6 @@ def api_wechat_sign_view():
 
 @wechat_app.route('/auth-login-after/')
 def auth_login_after_view():
-    print 's'
     if not session.get('wechat_nickname'):
         # code_url = url_for('wechat.auth_login_code_view')
         encode_url = urllib.quote('{}wechat/auth-login-code/'.format(request.url_root))
@@ -142,7 +141,7 @@ def auth_login_after_view():
             DICT['app_id'], encode_url, state
         )
         return redirect(redirect_url)
-    return render_template('wechat/auth_login_after.html', {'nickname': session.get('wechat_nickname')})
+    return render_template('wechat/auth_login_after.html', **{'nickname': session.get('wechat_nickname')})
 
 
 @wechat_app.route('/auth-login-code/')
