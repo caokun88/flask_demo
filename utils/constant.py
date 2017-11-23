@@ -38,6 +38,8 @@ MONTH_DICT = {'one': 30, 'three': 91, 'six': 182, 'twelve': 365}
 
 ACCESS_TOKEN_KEY = 'common_access_token'
 TIMEOUT_ACCESS_TOKEN = 7000
+JSAPI_TICKET_KEY = 'jsapi_ticket'
+TIMEOUT_JSAPI_TICKET = 7000
 
 WECHAT_TOKEN = ''
 
@@ -60,7 +62,7 @@ API_URL_DICT = {
     'unified_order_url': 'https://api.mch.weixin.qq.com/pay/unifiedorder',
     'pay_callback_url': 'http://xxxx/pay/notify/',
     'refund_url': 'https://api.mch.weixin.qq.com/secapi/pay/refund',
-    'sapi_ticket_url': 'https://api.weixin.qq.com/cgi-bin/ticket/getticket',
+    'jsapi_ticket_url': 'https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token={}&type=jsapi',
     'access_token_url': 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={}&secret={}',
     'create_menu_url': 'https://api.weixin.qq.com/cgi-bin/menu/create?access_token={}',
     'web_access_token_url': 'https://api.weixin.qq.com/sns/oauth2/access_token?'
@@ -69,7 +71,7 @@ API_URL_DICT = {
     'user_info_url': 'https://api.weixin.qq.com/cgi-bin/user/info?access_token={}&openid={}&lang=zh_CN',
     'upload_multi_media_temp_url': 'http://file.api.weixin.qq.com/cgi-bin/media/upload?access_token={}&type={}',
     'upload_multi_media_permanent_url': 'https://api.weixin.qq.com/cgi-bin/material/add_material?access_token={}&type={}',
-    'create_qrcode_url': 'https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token={}'
+    'create_qrcode_url': 'https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token={}',
 }
 
 # 创建菜单

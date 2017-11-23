@@ -12,7 +12,7 @@ from flask import request, render_template
 from settings import csrf, redis_conn
 from wechat import wechat_app
 from utils.constant import CLICK_DICT, DICT
-from utils.wechat_api import __api_get_access_token
+from utils.wechat_api import api_get_js_ticket
 from utils.respone_message import ok
 from utils.wechat_tools import check_from_wechat_signature, get_xml_from_dict, get_dict_from_xml, Sign
 
@@ -119,8 +119,8 @@ def api_wechat_sign_view():
     :return:
     """
     url = request.values.get('url')
-    access_token = __api_get_access_token()
-    sign_obj = Sign(access_token, url)
+    jsapi_ticket = api_get_js_ticket()
+    sign_obj = Sign(jsapi_ticket, url)
     sign_info = sign_obj.sign()
     sign_info['app_id'] = DICT['app_id']
     sign_info.pop('jsapi_ticket', '')

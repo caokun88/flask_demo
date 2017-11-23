@@ -7,7 +7,8 @@ import os
 import requests
 
 from settings import redis_conn
-from constant import PAY_DICT, DICT, API_URL_DICT, TIMEOUT_ACCESS_TOKEN, ACCESS_TOKEN_KEY, DEFINE_MENU
+from constant import PAY_DICT, DICT, API_URL_DICT, TIMEOUT_ACCESS_TOKEN, ACCESS_TOKEN_KEY, JSAPI_TICKET_KEY, \
+    DEFINE_MENU, TIMEOUT_JSAPI_TICKET
 from utils.wechat_tools import get_xml_from_dict, generate_nonce_str
 
 
@@ -299,6 +300,30 @@ def create_define_menu():
     except Exception as e:
         resp_json = dict()
     return resp_json
+
+
+def api_get_js_ticket():
+    """
+    获取jsapi_ticket
+    :return:
+    """
+    jsapi_ticket = redis_conn.get(JSAPI_TICKET_KEY)
+    if jsapi_ticket:
+        return jsapi_ticket
+    url = API_URL_DICT['jsapi_ticket_url']
+    access_token = __api_get_access_token()
+    resp_str = requests.get(
+        url=url.format(access_token)
+    )
+    try:
+        resp_dict = resp_str.json()
+    except Exception as e:
+        print e
+        resp_dict = dict()
+    jsapi_ticket = resp_dict.get('ticket')
+    if jsapi_ticket:
+        redis_conn.setex(JSAPI_TICKET_KEY, TIMEOUT_JSAPI_TICKET, jsapi_ticket)
+    return jsapi_ticket
 
 
 if __name__ == '__main__':
