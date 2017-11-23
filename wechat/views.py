@@ -129,7 +129,7 @@ def api_wechat_sign_view():
     return ok(data=sign_info)
 
 
-@wechat_app.route('/auth-login-after')
+@wechat_app.route('/auth-login-after/')
 def auth_login_after_view():
     print 's'
     if not session.get('openid'):
@@ -144,7 +144,7 @@ def auth_login_after_view():
     return render_template('wechat/auth_login_after.html')
 
 
-@wechat_app.route('/auth-login-code')
+@wechat_app.route('/auth-login-code/')
 def auth_login_code_view():
     code = request.values.get('code')
     if code:
