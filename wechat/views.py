@@ -111,6 +111,7 @@ def callback_view():
 
 @wechat_app.route('/share/')
 def share_view():
+    print request.url_root
     return render_template('wechat/share.html')
 
 
@@ -133,8 +134,8 @@ def api_wechat_sign_view():
 def auth_login_after_view():
     print 's'
     if not session.get('openid'):
-        code_url = url_for('wechat.auth_login_code_view')
-        encode_url = urllib.quote(code_url)
+        # code_url = url_for('wechat.auth_login_code_view')
+        encode_url = urllib.quote('http://{}wechat/auth-login-code/'.format(request.url_root))
         state = base64.b64encode(request.url)
         redirect_url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid={}&redirect_uri={}&' \
                        'response_type=code&scope=snsapi_userinfo&state={}#wechat_redirect'.format(
