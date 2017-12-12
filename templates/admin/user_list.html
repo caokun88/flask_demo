@@ -49,7 +49,7 @@
         <tbody>
             {% for user_obj in user_list %}
                 <tr>
-                    <td><a href="{{ url_for('order.order_add_view', order_id=user.id) }}">{{ user_obj.id }}</a></td>
+                    <td>{{ user_obj.id }}</td>
                     <td>{{ user_obj.nickname }}</td>
                     <td>{{ user_obj.real_name }}</td>
                     <td><button class="btn btn-info" onclick="select_modal({{ user_obj.id }})">{{ user_obj.level }}</button></td>
