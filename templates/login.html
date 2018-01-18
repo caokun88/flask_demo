@@ -16,26 +16,25 @@
         <form name="my_form" method="post" class="form-horizontal" role="form">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
             <div class="form-group">
-                <label for="nickname" class="col-sm-2 control-label">用户名</label>
-                <div class="col-sm-10">
+                <label for="nickname" class="col-xs-3 control-label">用户名</label>
+                <div class="col-xs-9">
                     <input type="text" name="nickname" value="" class="form-control" id="nickname" placeholder="请输入用户名">
                 </div>
             </div>
             <div class="form-group">
-                <label for="password" class="col-sm-2 control-label">密&nbsp;&nbsp;&nbsp;&nbsp;码</label>
-                <div class="col-sm-10">
+                <label for="password" class="col-xs-3 control-label">密&nbsp;&nbsp;&nbsp;&nbsp;码</label>
+                <div class="col-xs-9">
                     <input type="password" name="password" value="" class="form-control" id="password" placeholder="请输入密码">
                 </div>
             </div>
             <div class="form-group">
-                <label for="captcha" class="col-sm-2 control-label">验证码</label>
-                <div class="col-sm-6">
+                <label for="captcha" class="col-xs-3 control-label">验证码</label>
+                <div class="col-xs-5">
                     <input type="text" name="captcha" value="" class="form-control" id="captcha" placeholder="请输入验证码">
                 </div>
-                <div class="col-sm-2">
+                <div class="col-xs-4">
                     <img src="{{ url_for('auth.captcha_view') }}" id="get_captcha">
                 </div>
-                <label id="update" class="col-sm-2 control-label">点击刷新</label>
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
@@ -49,20 +48,40 @@
     h2 {
         text-align: center;
     }
-    .login-wrap {
-        /*position: absolute;*/
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        margin: auto;
-        /*width: 600px;*/
-        /*height: 320px;*/
-        background-color: #ccc;
+    @media screen and (max-width: 600px) {
+        .login-wrap {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+            width: 400px;
+            height: 420px;
+            background-color: #ccc;
+        }
+        .form-group label{
+            height: 34px;
+            line-height: 34px;
+        }
+    }
+
+    @media screen and (min-width: 600px){
+        .login-wrap {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+            width: 600px;
+            height: 320px;
+            background-color: #ccc;
+        }
     }
 </style>
 <script>
-    $("#update").on('click', function () {
+    $("#get_captcha").on('click', function () {
         $("#get_captcha").attr("src", "/auth/captcha/?" + Math.random())
     })
 </script>

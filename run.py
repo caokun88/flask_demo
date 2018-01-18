@@ -19,12 +19,12 @@ from auth.views import auth_app
 from order.views import order_app
 from wechat.views import wechat_app
 
-app.register_blueprint(index_app)
+app.register_blueprint(index_app, url_prefix='/admin')
 app.register_blueprint(test_app, url_prefix='/test')
-app.register_blueprint(project_app, url_prefix='/project')
+app.register_blueprint(project_app, url_prefix='/admin/project')
 app.register_blueprint(auth_app, url_prefix='/auth')
-app.register_blueprint(order_app, url_prefix='/order')
-app.register_blueprint(wechat_app, url_prefix='/wechat')
+app.register_blueprint(order_app, url_prefix='/admin/order')
+app.register_blueprint(wechat_app, url_prefix='/admin/wechat')
 
 
 @app.before_request
