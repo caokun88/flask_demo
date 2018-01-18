@@ -18,6 +18,7 @@ from project.views import project_app
 from auth.views import auth_app
 from order.views import order_app
 from wechat.views import wechat_app
+from frontend.index.views import frontend_app
 
 app.register_blueprint(index_app, url_prefix='/admin')
 app.register_blueprint(test_app, url_prefix='/test')
@@ -25,6 +26,8 @@ app.register_blueprint(project_app, url_prefix='/admin/project')
 app.register_blueprint(auth_app, url_prefix='/auth')
 app.register_blueprint(order_app, url_prefix='/admin/order')
 app.register_blueprint(wechat_app, url_prefix='/admin/wechat')
+
+app.register_blueprint(frontend_app)
 
 
 @app.before_request
