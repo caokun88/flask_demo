@@ -15,9 +15,9 @@ from email.header import Header
 import requests
 
 
-EMAIL_HOST = 'mail.qq.cn'
-EMAIL_USER = "1312637340@qq.cn"
-EMAIL_PASS = ""
+EMAIL_HOST = 'smtp.qq.com'
+EMAIL_USER = "1312637340@qq.com"
+EMAIL_PASS = "thayjdbvoaltijef"
 
 
 def send_mail(mail_to, subject='', content='', html_content='', file_paths=None, http_links=None):
@@ -51,7 +51,7 @@ def send_mail(mail_to, subject='', content='', html_content='', file_paths=None,
                                   filename='=?utf-8?b?' + base64.b64encode(f_name.encode('UTF-8')) + '?=')
 
         server = smtplib.SMTP()
-        server.connect(EMAIL_HOST)
+        server.connect(EMAIL_HOST, 25)
         server.login(EMAIL_USER, EMAIL_PASS)
         server.sendmail(me, mail_to, msg=msg.as_string())
         server.quit()
@@ -59,3 +59,7 @@ def send_mail(mail_to, subject='', content='', html_content='', file_paths=None,
         print e
         return False
     return True
+
+
+# if __name__ == '__main__':
+#     send_mail(['caokun@xfz.cn'], subject=u'本地测试一下', content=u'本地测试')
