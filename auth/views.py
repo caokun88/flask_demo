@@ -52,6 +52,9 @@ def captcha_view():
 @auth_app.route('/login/', methods=['POST', 'GET'])
 def login_view():
     next_url = request.args.get('next', '')
+    # print session
+    # print session.get('csrf_token')
+    # print session.get('captcha_code')
     if g.user is not None and g.user.is_authenticated:
         return redirect(next_url)
     if request.method == 'POST':
