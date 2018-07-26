@@ -23,7 +23,7 @@ function jumpto(name, current_page, page_size, total_page) {
         var end_time = $("#datetimepicker2>input").val();
         var project_id = $("#project_id").val();
         var keyword = $("#keyword").val();
-        jump_url = '/order/list/?start_time=' + start_time + '&end_time=' + end_time +
+        jump_url = '/admin/order/list/?start_time=' + start_time + '&end_time=' + end_time +
                 '&project_id=' + project_id + '&keyword=' + keyword + '&current_page=' + current_page +
             '&page_size=' + page_size;
     }

@@ -134,18 +134,19 @@
 
             $.ajax({
                 type: 'post',
-                url: '/order/delete/' + order_id.toString() + '/',
+                url: '/admin/order/delete/' + order_id.toString() + '/',
                 data: {'order_id': order_id, 'csrf_token': csrf_token},
                 dataType: 'json',
                 success: function (data) {
                     if (data.code == 200){
+                        alert(data.code)
                         $("table tbody tr").each(function () {
-                            if ($(this).children("td").html() == order_id){
+                            if ($(this).children("td").children("a").html() == order_id.toString()){
                                 $(this).remove('tr');
                             }
                         });
                     }else{
-                        alert("删除失败")
+                        alert("删除失败");
                     }
                 }
             })
@@ -174,7 +175,7 @@
             var end_time = $("#datetimepicker2>input").val();
             var project_id = $("#project_id").val();
             var keyword = $("#keyword").val();
-            window.location.href = '/order/list/?start_time=' + start_time + '&end_time=' + end_time +
+            window.location.href = '/admin/order/list/?start_time=' + start_time + '&end_time=' + end_time +
                 '&project_id=' + project_id + '&keyword=' + keyword;
         }
 
@@ -184,7 +185,7 @@
             var end_time = $("#datetimepicker2>input").val();
             var project_id = $("#project_id").val();
             var keyword = $("#keyword").val();
-            window.location.href = '/order/download/?start_time=' + start_time + '&end_time=' + end_time +
+            window.location.href = '/admin/order/download/?start_time=' + start_time + '&end_time=' + end_time +
                 '&project_id=' + project_id + '&keyword=' + keyword;
         }
 
