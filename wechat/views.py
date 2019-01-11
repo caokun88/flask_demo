@@ -134,7 +134,7 @@ def api_wechat_sign_view():
 def auth_login_after_view():
     if not session.get('wechat_nickname'):
         # code_url = url_for('wechat.auth_login_code_view')
-        encode_url = urllib.quote('{}wechat/auth-login-code/'.format(request.url_root))
+        encode_url = urllib.quote('{}/admin/wechat/auth-login-code/'.format(request.url_root))
         state = base64.b64encode(request.url)
         redirect_url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid={}&redirect_uri={}&' \
                        'response_type=code&scope=snsapi_userinfo&state={}#wechat_redirect'.format(
