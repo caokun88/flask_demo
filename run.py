@@ -40,10 +40,10 @@ def page_not_found_view(e):
     return render_template('error/404.html')
 
 
-@app.route('/MP_verify_59WJCaIi0dtv1Qoe.txt/')
+@app.route('/MP_verify_V63MRMc5QZ4gN0rj.txt/')
 def wechat_js_file_view():
 
-    return send_from_directory(static_dir, 'MP_verify_59WJCaIi0dtv1Qoe.txt', as_attachment=True)
+    return send_from_directory(static_dir, 'MP_verify_V63MRMc5QZ4gN0rj.txt', as_attachment=True)
 
 
 @app.context_processor
