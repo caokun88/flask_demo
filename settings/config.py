@@ -14,6 +14,15 @@ class BaseConfig(object):  # 基本配置类
     DEBUG = True
     ITEMS_PER_PAGE = 10
 
+    # redis
+    CACHE = {
+        "CACHE_TYPE": "redis",
+        "CACHE_REDIS_HOST": "127.0.0.1",
+        "CACHE_REDIS_PORT": 6379,
+        "CACHE_REDIS_DB": 8,
+        "CACHE_REDIS_PASSWORD": "",
+    }
+
 
 class DevConfig(BaseConfig):
     SQLALCHEMY_BINDS = {

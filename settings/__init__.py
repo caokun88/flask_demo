@@ -14,6 +14,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect  # CsrfProtect
 from blinker import Namespace
+from flask_cache import Cache
 
 from config import config
 
@@ -28,6 +29,7 @@ app.config.from_object(config[env])
 db = SQLAlchemy(app)
 csrf = CSRFProtect()
 csrf.init_app(app)
+cache = Cache(app, config=config[env].CACHE)
 
 base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 

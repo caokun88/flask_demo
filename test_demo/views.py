@@ -15,6 +15,7 @@ from utils.respone_message import ok
 from tasks.test import test_celery
 from utils import qr_code
 from cStringIO import StringIO
+from settings import cache
 
 
 @test_app.route('/')
@@ -58,3 +59,26 @@ def qrcode_test_view():
     response = make_response(buf.getvalue())
     response.headers['Content-Type'] = 'image/jpeg'
     return response
+
+
+@test_app.route('/test-cache1/')
+@cache.cached(timeout=30, key_prefix='test-cache1')
+def test_cache1():
+    print 'test_cache1'
+    return 'test_cache1 success'
+
+
+@test_app.route('/test-cache2/')
+def test_cache2():
+    l = ['caokun', 'renfurui']
+    cache.set('l', l, 60 * 1)
+    print 'set success'
+    return 'success set'
+
+
+@test_app.route('/test-cache3/')
+def test_cache3():
+    l = cache.get('l')
+    print l
+    print 'get success'
+    return str(l)

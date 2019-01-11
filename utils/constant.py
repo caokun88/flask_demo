@@ -53,8 +53,8 @@ PAY_DICT = {
 }
 
 DICT = {
-    'app_id': 'wx23d18fcf079cb4c4',
-    'secret': 'de0bd67ab3c763e0f274f7fa394ea4d0',
+    'app_id': 'wxf8ccef703304a358',
+    'secret': 'cc473189070f09ffd19d8d1484ad2a63',
     'token': 'caokun'
 }
 
