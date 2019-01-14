@@ -66,13 +66,14 @@ def get_xml_from_dict(params_dict):
         elif isinstance(v, (str, unicode)):
             tag.append(CData(v))
         else:
-            for k1, v1 in v.items():
-                tag1 = soup.new_tag(k1)
-                if isinstance(v1, int):
-                    tag1.append(soup.new_string(str(v1)))
-                elif isinstance(v1, (str, unicode)):
-                    tag1.append(CData(v1))
-            tag.append(tag1)
+            if v:
+                for k1, v1 in v.items():
+                    tag1 = soup.new_tag(k1)
+                    if isinstance(v1, int):
+                        tag1.append(soup.new_string(str(v1)))
+                    elif isinstance(v1, (str, unicode)):
+                        tag1.append(CData(v1))
+                tag.append(tag1)
         xml.append(tag)
     return str(xml)
 
