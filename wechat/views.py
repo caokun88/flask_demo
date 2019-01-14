@@ -20,7 +20,7 @@ from utils.constant import CLICK_DICT, DICT
 from utils.wechat_api import api_get_js_ticket, api_get_web_access_token, api_get_web_user_info
 from utils.respone_message import ok
 from utils.wechat_tools import check_from_wechat_signature, get_xml_from_dict, get_dict_from_xml, Sign, \
-    get_dict_from_xml2
+    get_dict_from_xml2, get_xml_from_dict2
 
 
 @csrf.exempt
@@ -65,7 +65,7 @@ def callback_view():
                         # 搜索名称关注
                         resp_data['Content'] = u"欢迎关注"
                     resp_data['MsgType'] = 'text'
-                    xml_str = get_xml_from_dict(resp_data)
+                    xml_str = get_xml_from_dict2(resp_data)
                     return xml_str
                 elif event in ['unsubscribe']:
                     # 修改表状态
@@ -110,7 +110,7 @@ def callback_view():
                 elif msg_type == 'video':
                     resp_data['Content'] = u"你发送的是视频消息，对吗？"
                     resp_data['MsgType'] = 'text'
-            xml_str = get_xml_from_dict(resp_data)
+            xml_str = get_xml_from_dict2(resp_data)
             return xml_str
     return ''
 
