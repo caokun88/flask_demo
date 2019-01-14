@@ -99,6 +99,7 @@ def callback_view():
             else:
                 if msg_type == 'text':
                     resp_data['Content'] = dict_data['Content']
+                    print resp_data
                 elif msg_type == 'image':
                     resp_data['Image'] = {"MediaId": dict_data['MediaId']}
                 elif msg_type == 'voice':
