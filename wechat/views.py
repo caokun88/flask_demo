@@ -40,7 +40,7 @@ def callback_view():
             xml_str = request.data
             print xml_str
             # dict_data = get_dict_from_xml(xml_str)
-            dict_data = get_dict_from_xml2(xml_str)
+            dict_data = get_dict_from_xml2(xml_str).get("xml", {})
             msg_type = dict_data.get('MsgType')
             event = dict_data.get('Event')
             openid = dict_data.get('FromUserName')
@@ -110,7 +110,7 @@ def callback_view():
                 elif msg_type == 'video':
                     resp_data['Content'] = u"你发送的是视频消息，对吗？"
                     resp_data['MsgType'] = 'text'
-            xml_str = get_xml_from_dict2(resp_data)
+            xml_str = get_xml_from_dict2({"xml": resp_data})
             return xml_str
     return ''
 
