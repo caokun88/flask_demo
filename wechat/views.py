@@ -6,6 +6,9 @@ create on 2017-11-23
 @author: cao kun
 """
 
+import sys
+reload(sys)
+sys.setdefaultencoding("utf-8")
 import time
 import urllib
 import base64
@@ -16,7 +19,8 @@ from wechat import wechat_app
 from utils.constant import CLICK_DICT, DICT
 from utils.wechat_api import api_get_js_ticket, api_get_web_access_token, api_get_web_user_info
 from utils.respone_message import ok
-from utils.wechat_tools import check_from_wechat_signature, get_xml_from_dict, get_dict_from_xml, Sign
+from utils.wechat_tools import check_from_wechat_signature, get_xml_from_dict, get_dict_from_xml, Sign, \
+    get_dict_from_xml2
 
 
 @csrf.exempt
@@ -35,7 +39,8 @@ def callback_view():
         if status:
             xml_str = request.data
             print xml_str
-            dict_data = get_dict_from_xml(xml_str)
+            # dict_data = get_dict_from_xml(xml_str)
+            dict_data = get_dict_from_xml2(xml_str)
             msg_type = dict_data.get('MsgType')
             event = dict_data.get('Event')
             openid = dict_data.get('FromUserName')
@@ -141,7 +146,7 @@ def auth_login_after_view():
             DICT['app_id'], encode_url, state
         )
         return redirect(redirect_url)
-    return render_template('wechat/auth_login_after.html', **{'nickname': session.get('wechat_nickname')})
+    return render_template('wechat/auth_login_after.html', **{'nickname': session.get('wechat_nickname').encode("raw_unicode_escape")})
 
 
 @wechat_app.route('/auth-login-code/')

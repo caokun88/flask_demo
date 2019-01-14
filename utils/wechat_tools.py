@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 # coding=utf8
 
+import json
 import hashlib
 import random
 import string
 import time
 
+import xmltodict
 from bs4 import BeautifulSoup, CData
 from constant import PAY_DICT, DICT
 
@@ -88,6 +90,13 @@ def get_dict_from_xml(xml_str):
         if item.name:
             data[item.name] = item.string
     return data
+
+
+def get_dict_from_xml2(xml_str):
+    try:
+        return json.dumps(xmltodict.parse(xml_str))
+    except Exception as e:
+        return {}
 
 
 def check_xml_sign(xml):
