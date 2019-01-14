@@ -94,7 +94,7 @@ def get_dict_from_xml(xml_str):
 
 def get_dict_from_xml2(xml_str):
     try:
-        return json.dumps(xmltodict.parse(xml_str))
+        return json.loads(json.dumps(xmltodict.parse(xml_str)))
     except Exception as e:
         return {}
 
